@@ -1,0 +1,13 @@
+.App {
+  margin: 10px;
+}
+
+textarea {
+  resize: none;
+  width: 600px;
+  height: 200px;
+}
+
+.text {
+  white-space: pre-wrap;
+}
