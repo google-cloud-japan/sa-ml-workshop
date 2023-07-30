@@ -12,6 +12,7 @@ firebase-debug.*.log*
 
 # Firebase config
 .firebaserc
+firebase.json
 
 # Runtime data
 pids
@@ -37,8 +38,8 @@ bower_components
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+# Compiled binary
+build
 
 # Dependency directories
 node_modules/
