@@ -20,9 +20,6 @@
       "@svgr/webpack": "^6.5.1"
     }
   },
-  "devDependencies": {
-    "@svgr/webpack": "^6.5.1"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

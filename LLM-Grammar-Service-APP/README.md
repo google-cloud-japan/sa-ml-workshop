@@ -118,7 +118,7 @@ firebase deploy
 
 Open `https://[Project ID].web.app/` (replace `[Project ID]` with your project ID) with a web browser.
 
-As in the following screenshot, input some (gramatically incorrect) English text and click the "Correct me!" button.
+As in the following screenshot, input some (grammatically incorrect) English text and click the "Correct me!" button.
 A new text with grammar correction and three model sentences will appear on the screen.
 
 ![screenshot](/LLM-Grammar-Service-APP/screenshot.png)
