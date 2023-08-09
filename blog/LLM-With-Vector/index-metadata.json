@@ -1,0 +1,15 @@
+{
+    "contentsDeltaUri": $INDEX_BUTCKET_URI,
+    "config": {
+        "dimensions": 768,
+        "approximateNeighborsCount": 30,
+        "distanceMeasureType": "COSINE_DISTANCE",
+        "shardSize": "SHARD_SIZE_SMALL",
+        "algorithm_config": {
+            "treeAhConfig": {
+                "leafNodeEmbeddingCount": 5000,
+                "leafNodesToSearchPercent": 3
+            }
+        }
+    }
+}
