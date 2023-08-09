@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/$YOUR_FAVORITE_IMAGE', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/$YOUR_FAVORITE_IMAGE']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', 'toy-recommender', '--image', 'gcr.io/$PROJECT_ID/$YOUR_FAVORITE_IMAGE', '--region', 'us-central1', '--set-env-vars', 'PROJECT_ID=$PROJECT_ID,REGION=us-central1,GCS_BUTCKET=$BUTCKET,INDEX_ID=$INDEX_ID,ENDPOINT_ID=$ENDPOINT_ID']
+images:
+  - gcr.io/$PROJECT_ID/$YOUR_FAVORITE_IMAG
