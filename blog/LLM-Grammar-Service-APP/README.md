@@ -30,7 +30,7 @@ git clone https://github.com/google-cloud-japan/sa-ml-workshop
 1. Build and deploy the backend service to Cloud Run.
 
 ```
-cd $HOME/sa-ml-workshop/LLM-Grammar-Service-APP/backend
+cd $HOME/sa-ml-workshop/blog/LLM-Grammar-Service-APP/backend
 gcloud builds submit --tag gcr.io/$PROJECT_ID/grammar-service
 gcloud run deploy grammar-service \
   --image gcr.io/$PROJECT_ID/grammar-service \
@@ -64,7 +64,7 @@ You will see the response similar to the following one.
 1. Initialize the firebase hosting service.
 
 ```
-cd $HOME/sa-ml-workshop/LLM-Grammar-Service-APP
+cd $HOME/sa-ml-workshop/blog/LLM-Grammar-Service-APP
 firebase init hosting
 ```
 
@@ -121,13 +121,13 @@ Open `https://[Project ID].web.app/` (replace `[Project ID]` with your project I
 As in the following screenshot, input some (grammatically incorrect) English text and click the "Correct me!" button.
 A new text with grammar correction and three model sentences will appear on the screen.
 
-![screenshot](/LLM-Grammar-Service-APP/screenshot.png)
+![screenshot](/blog/LLM-Grammar-Service-APP/screenshot.png)
 
 ## Shutdown
 
 The deployed web application is accessible from the public internet. To avoid scurity issues, disable the application once you've done the test.
 
 ```
-cd $HOME/sa-ml-workshop/LLM-Grammar-Service-APP
+cd $HOME/sa-ml-workshop/blog/LLM-Grammar-Service-APP
 firebase hosting:disable
 ```
