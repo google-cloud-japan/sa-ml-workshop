@@ -61,14 +61,16 @@ You will see the response similar to the following one.
 
 ### Deploy the frontend Web application
 
-1. Initialize the firebase hosting service.
+1. Add your project to Firebase from [Firebase console](https://console.firebase.google.com/)
+
+2. Initialize the firebase hosting service.
 
 ```
 cd $HOME/sa-ml-workshop/blog/LLM-Grammar-Service-APP
-firebase init hosting
+firebase init hosting -P $PROJECT_ID
 ```
 
-Select `Add Firebase to an existing Google Cloud Platform project` to select your project, and reply to the questions as below.
+  Reply to the questions as below.
 
 ```
 What do you want to use as your public directory? (public) build
@@ -76,7 +78,7 @@ Configure as a single-page app (rewrite all urls to /index.html)? N
 Set up automatic builds and deploys with GitHub? N
 ```
 
-2. Open `firebase.json` in the current directory and replace the contents as below.
+3. Open `firebase.json` in the current directory and replace the contents as below.
 
 ```
 {
@@ -100,13 +102,13 @@ Set up automatic builds and deploys with GitHub? N
 }
 ```
 
-3. Open `src/App.js` and replace `[Project ID]` in the following line with your project ID.
+4. Open `src/App.js` and replace `[Project ID]` in the following line with your project ID.
 
 ```
 const projectId = "[Project ID]";
 ```
 
-4. Build the frontend web application and deploy to Firebase hosting.
+5. Build the frontend web application and deploy to Firebase hosting.
 
 ```
 yarn install
