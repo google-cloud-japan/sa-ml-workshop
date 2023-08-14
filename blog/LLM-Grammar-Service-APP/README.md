@@ -2,6 +2,8 @@
 
 Disclaimer: This is not an official Google product.
 
+日本語での解説は、[Google Cloud で生成 AI アプリケーションを作ろう！パート 4 : LLM を活用した Web アプリを英語学習に役立てる](https://zenn.dev/google_cloud_jp/articles/generative-ai-grammar-correction)を参照してください。
+
 ## Setup
 
 ### Create a new Google Cloud project and clone the repository.
