@@ -2,13 +2,13 @@
 
 Disclaimer: This is not an official Google product.
 
-## Setup
+## セットアップ方法
 
-### Create a new Google Cloud project and clone the repository.
+### Google Cloud プロジェクトの作成とリポジトリのクローン
 
-1. Create a new Google Cloud project from [Cloud Console](https://console.cloud.google.com), and open Cloud Shell to execute the following commands.
-
-2. Enable Cloud Build API and Cloud Run API. (replace `[Project ID]` with your project ID.)
+1. [Cloud Console](https://console.cloud.google.com) から新しいプロジェクトを作成して、Cloud Shell を開きます。これ以降のコマンドは、Cloud Shell の端末で実行していきます。
+   
+2. Cloud Build API と Cloud Run API を有効化します。（`[Project ID]` の部分は、実際のプロジェクト ID に置き換えます。）
 
 ```
 PROJECT_ID=[Project ID]
@@ -19,15 +19,15 @@ gcloud services enable \
   aiplatform.googleapis.com
 ```
 
-3. Clone the repository.
-   
+3. このリポジトリをクローンします。
+
 ```
 cd $HOME
 git clone https://github.com/google-cloud-japan/sa-ml-workshop
 ```
-### Deploy the backend service.
+### バックエンドサービスのデプロイ
 
-1. Build and deploy the backend service to Cloud Run.
+1. バックエンドサービスをビルドして、Cloud Run にデプロイします。
 
 ```
 cd $HOME/sa-ml-workshop/blog/Fashion-Compliment-App/backend
@@ -38,7 +38,7 @@ gcloud run deploy fashion-compliment-service \
   --allow-unauthenticated
 ```
 
-2. Send a request to the REST API to test the backend.
+2. テスト画像を用いて、バックエンドサービスをテストします。
 
 ```
 wget -q -O image.jpg \
@@ -54,34 +54,34 @@ curl -X POST -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
 -s ${SERVICE_URL}/fashion-compliment-service/api/v1/get-compliment | jq .
 ```
 
-You will see the response similar to the following one.
+次のようなメッセージが表示されれば、バックエンドサービスは正しく動いています。
 
 ```
 {
-  "message": "あなたは今日、とても素晴らしいプレゼンテーションをしました。あなたの自信に満ちた態度と、ブルー のセーターとシャツの組み合わせが、あなたのプレゼンテーションを成功に導きました。これからも、あなたの素晴らし いプレゼンテーションを期待しています。"
+  "message": "あなたは今日、とても素晴らしいプレゼンテーションをしました。あなたの自信に満ちた態度と、ブルーのセーターとシャツの組み合わせが、あなたのプレゼンテーションを成功に導きました。これからも、あなたの素晴らし いプレゼンテーションを期待しています。"
 }
 ```
 
-### Deploy the frontend Web application
+### フロントエンド（Web アプリケーション）のデプロイ
 
-1. Add your project to Firebase from [Firebase console](https://console.firebase.google.com/)
+1. [Firebase console](https://console.firebase.google.com/) で現在のプロジェクトを登録します。
 
-2. Initialize the firebase hosting service.
+2. Firebase Hosting のサービスを初期設定します。
 
 ```
 cd $HOME/sa-ml-workshop/blog/Fashion-Compliment-App
 firebase init hosting -P $PROJECT_ID
 ```
 
-  Reply to the questions as below.
-
+  質問項目には、次の様に答えます。
+  
 ```
 What do you want to use as your public directory? (public) build
 Configure as a single-page app (rewrite all urls to /index.html)? N
 Set up automatic builds and deploys with GitHub? N
 ```
 
-3. Open `firebase.json` in the current directory and replace the contents as below.
+3. カレントディレクトリに作成された `firebase.json` の内容を以下に書き換えます。
 
 ```
 {
@@ -105,13 +105,13 @@ Set up automatic builds and deploys with GitHub? N
 }
 ```
 
-4. Open `src/App.js` and replace `[Project ID]` in the following line with your project ID.
+4. ファイル `src/App.js` を開いて、先頭付近にある下記の行の `[Project ID]` を実際のプロジェクト ID に書き換えます。
 
 ```
 const projectId = "[Project ID]";
 ```
 
-5. Build the frontend web application and deploy to Firebase hosting.
+5. Web アプリケーションをビルドして、Firebase Hosting にデプロイします。
 
 ```
 yarn install
@@ -119,17 +119,19 @@ yarn build
 firebase deploy
 ```
 
-### Test the example application
+### アプリケーションの動作確認
 
-Open `https://[Project ID].web.app/` (replace `[Project ID]` with your project ID) with a web browser.
+ブラウザで `https://[Project ID].web.app/` を開きます。(`[Project ID]` の部分は実際のプロジェクト ID に置き換えます。）
 
-Upload your profile photo and get a great compliment for your fashion style!
+次のスクリーンショットのように、チャットアプリケーション風の画面が表示されます。[ファイルアップロード] のボタンで人物が写った画像ファイルをアップロードすると、ファッションを褒めるメッセージが表示されます。
 
 ![screenshot](/blog/Fashion-Compliment-App/screenshot.png)
 
-## Shutdown
+## アプリケーションの停止
 
-The deployed web application is accessible from the public internet. To avoid scurity issues, disable the application once you've done the test.
+この Web アプリケーションは、インターネットに公開された状態になっており、誰でも自由にアクセスできます。
+
+**安全のため、動作確認が終わったら、次のコマンドでアプリケーションの公開を停止してください。**
 
 ```
 cd $HOME/sa-ml-workshop/blog/Fashion-Compliment-App
