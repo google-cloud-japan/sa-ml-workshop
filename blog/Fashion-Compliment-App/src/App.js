@@ -2,9 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import "./App.css";
 import loading from "./images/loading.gif";
 
-const projectId = "etsuji-genai-demo";
-
-
+const projectId = "[Project ID]";
 
 
 class FileReaderEx extends FileReader{
@@ -74,10 +72,7 @@ export const App = (props) => {
     setButtonDisabled(false);
   };
 
-  // eslint-disable-next-line
   const getAnswer = async (image) => {
-
-// eslint-disable-next-line
     const callBackend = async (imageBase64) => {
       const baseURL = "https://" + projectId + ".web.app";
       const apiEndpoint = baseURL + "/fashion-compliment-service/api/v1/get-compliment";
@@ -112,17 +107,14 @@ export const App = (props) => {
         elem = (
           <div key={i} className="typing">
             <img src={loading} alt="loading" style={{
-              width: "100px",
-              marginLeft: "150px"}}/>
+              width: "100px", marginLeft: "150px"}}/>
           </div>
         );          
       } else {
         elem = (
           <div key={i} className="bot" style={{
-            width: "300px",
-            padding: "10px",
-            marginBottom: "20px",
-            border: "1px solid #333333",
+            width: "300px", padding: "10px",
+            marginBottom: "20px", border: "1px solid #333333",
             borderRadius: "10px"}}> {item.text}
           </div>
         );
