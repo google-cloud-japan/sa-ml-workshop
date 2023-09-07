@@ -8,7 +8,7 @@ Disclaimer: This is not an official Google product.
 
 1. [Cloud Console](https://console.cloud.google.com) から新しいプロジェクトを作成して、Cloud Shell を開きます。これ以降のコマンドは、Cloud Shell の端末で実行していきます。
    
-2. Cloud Build API と Cloud Run API を有効化します。（`[Project ID]` の部分は、実際のプロジェクト ID に置き換えます。）
+2. Cloud Build、Cloud Run、および、Vertex AI の API を有効化します。（`[Project ID]` の部分は、実際のプロジェクト ID に置き換えます。）
 
 ```
 PROJECT_ID=[Project ID]
