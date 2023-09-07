@@ -1,4 +1,4 @@
-# Grammar correction service - example application
+# Fashion compliment service - example application
 
 Disclaimer: This is not an official Google product.
 
