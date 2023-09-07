@@ -51,7 +51,7 @@ SERVICE_URL=$(gcloud run services list --platform managed \
 echo {\"image\":\"$(base64 -w0 image.jpg)\"} | \
 curl -X POST -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
 -H "Content-Type: application/json" -d @- \
--s ${SERVICE_URL}/fashion-compliment-service/api/v1/get-compliment| jq .
+-s ${SERVICE_URL}/fashion-compliment-service/api/v1/get-compliment | jq .
 ```
 
 You will see the response similar to the following one.
