@@ -56,7 +56,7 @@ def get_compliment_message(image):
 
 
 @app.route('/fashion-compliment-service/api/v1/get-compliment', methods=['POST'])
-def grammar_correction():
+def fashion_compliment():
     json_data = request.get_json()
     image_base64 = json_data['image']
     image = Image(base64.b64decode(image_base64))
