@@ -2,6 +2,11 @@
 
 Disclaimer: This is not an official Google product.
 
+これは、次の Blog 記事のサンプルアプリケーションです。
+
+- [Google Cloud で生成 AI アプリケーションを作ろう！パート 9：Visual QA で AI にファッションを褒めてもらう](https://zenn.dev/google_cloud_jp/articles/generative-ai-visual-qa)
+
+
 ## セットアップ方法
 
 ### Google Cloud プロジェクトの作成とリポジトリのクローン
