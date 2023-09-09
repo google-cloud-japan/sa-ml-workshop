@@ -8,7 +8,7 @@ Disclaimer: This is not an official Google product.
 
 1. Create a new Google Cloud project from [Cloud Console](https://console.cloud.google.com), and open Cloud Shell to execute the following commands.
 
-2. Enable Cloud Build API and Cloud Run API. (replace `[Project ID]` with your project ID.)
+2. Enable Cloud Build API, Cloud Run API and Vertex AI API. (replace `[Project ID]` with your project ID.)
 
 ```
 PROJECT_ID=[Project ID]
