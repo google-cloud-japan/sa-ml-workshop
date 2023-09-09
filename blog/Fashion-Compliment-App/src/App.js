@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import loading from "./images/loading.gif";
 
@@ -32,9 +32,9 @@ class ImageEx extends Image {
 }
 
 
-const resizeImage = async (imageBlog, width) => {
-  const context = document.createElement('canvas').getContext('2d')
-  const image = await new ImageEx().create(imageBlog);
+const resizeImage = async (imageBlob, width) => {
+  const context = document.createElement("canvas").getContext("2d")
+  const image = await new ImageEx().create(imageBlob);
 
   const heightCurrent = image.naturalHeight;
   const widthCurrent = image.naturalWidth;
@@ -72,7 +72,6 @@ export const App = (props) => {
 
 
   const getAnswer = async (imageBlob) => {
-
     const callBackend = async (imageBase64) => {
       const baseURL = "https://" + projectId + ".web.app";
       const apiEndpoint = baseURL + "/fashion-compliment-service/api/v1/get-compliment";
@@ -129,7 +128,7 @@ export const App = (props) => {
         elem = (
           <div key={i} className="typing">
             <img src={loading} alt="loading" style={{
-              width: "100px", marginLeft: "150px"}}/>
+              width: "100px", marginLeft: "120px"}}/>
           </div>
         );          
       } else {
