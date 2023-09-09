@@ -35,8 +35,21 @@ def get_fashion_items(image):
     return results[-1]
 
 
-def get_compliment_message(image):
-    prompt = '''\
+def get_compliment_message(image, lang='en'):
+    if lang == 'en':
+        prompt = '''\
+You are a professional fashion advisor.
+Create a paragraph to give a great compliment to the person described as below.
+Don't use proper nouns that identify a specific person.
+Don't use the phrase 'skin tone'.
+
+Description: {}
+
+Fashion items: {}
+'''
+
+    if lang == 'ja':
+        prompt = '''\
 ファッションアドバイザーの立場で、以下の様に記述される人物を褒め称える文章を作ってください。
 その人物に語りかける様に、数行の文章を作ってください。
 個人を特定する名前は使用しないでください。
@@ -58,9 +71,13 @@ def get_compliment_message(image):
 @app.route('/fashion-compliment-service/api/v1/get-compliment', methods=['POST'])
 def fashion_compliment():
     json_data = request.get_json()
+    if 'lang' in json_data.keys():
+      lang = json_data['lang']
+    else:
+      lang = 'en'
     image_base64 = json_data['image']
     image = Image(base64.b64decode(image_base64))
-    message = get_compliment_message(image)
+    message = get_compliment_message(image, lang)
     resp = {'message': message}
 
     return resp, 200

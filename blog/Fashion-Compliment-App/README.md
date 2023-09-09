@@ -53,7 +53,7 @@ SERVICE_NAME="fashion-compliment-service"
 SERVICE_URL=$(gcloud run services list --platform managed \
   --format="table[no-heading](URL)" --filter="metadata.name:${SERVICE_NAME}")
 
-echo {\"image\":\"$(base64 -w0 image.jpg)\"} | \
+echo {\"image\":\"$(base64 -w0 image.jpg)\", \"lang\":\"ja\"} | \
 curl -X POST -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
 -H "Content-Type: application/json" -d @- \
 -s ${SERVICE_URL}/fashion-compliment-service/api/v1/get-compliment | jq .
@@ -110,10 +110,11 @@ Set up automatic builds and deploys with GitHub? N
 }
 ```
 
-4. ファイル `src/App.js` を開いて、先頭付近にある下記の行の `[Project ID]` を実際のプロジェクト ID に書き換えます。
+4. ファイル `src/App.js` を開いて、先頭付近にある下記の行の `[Project ID]` を実際のプロジェクト ID に書き換えます。また、`"en"` の部分を `"ja"` に変更します。（この部分を `"en"` のままにするとメッセージが英語で表示されます。）
 
 ```
 const projectId = "[Project ID]";
+const lang = "en";
 ```
 
 5. Web アプリケーションをビルドして、Firebase Hosting にデプロイします。
