@@ -41,7 +41,6 @@ def get_compliment_message(image, lang='en'):
 You are a professional fashion advisor.
 Create a paragraph to give a great compliment to the person described as below.
 Don't use proper nouns that identify a specific person.
-Don't use the phrase 'skin tone'.
 
 Description: {}
 
