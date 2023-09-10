@@ -8,9 +8,9 @@ const lang = "en";
 
 class FileReaderEx extends FileReader {
   #readAs(blob, ctx) {
-    return new Promise((res, rej) => {
-      super.addEventListener("load", ({target}) => res(target.result));
-      super.addEventListener("error", ({target}) => rej(target.error));
+    return new Promise((resolve, reject) => {
+      super.addEventListener("load", ({target}) => resolve(target.result));
+      super.addEventListener("error", ({target}) => reject(target.error));
       super[ctx](blob);
     });
   }
@@ -23,9 +23,9 @@ class FileReaderEx extends FileReader {
 
 class ImageEx extends Image {
   create(blob) {
-    return new Promise((res, rej) => {
-      super.addEventListener("load", () => res(this));
-      super.addEventListener("error", rej);
+    return new Promise((resolve, reject) => {
+      super.addEventListener("load", () => resolve(this));
+      super.addEventListener("error", reject);
       super.src = URL.createObjectURL(blob);
     });
   }
@@ -33,7 +33,7 @@ class ImageEx extends Image {
 
 
 const resizeImage = async (imageBlob, width) => {
-  const context = document.createElement("canvas").getContext("2d")
+  const context = document.createElement("canvas").getContext("2d");
   const image = await new ImageEx().create(imageBlob);
 
   const heightCurrent = image.naturalHeight;
@@ -44,7 +44,7 @@ const resizeImage = async (imageBlob, width) => {
   context.drawImage(image, 0, 0, widthCurrent, heightCurrent, 0, 0, width, height);
 
   return new Promise((resolve) => {
-    context.canvas.toBlob(resolve, "image/jpeg", 0.9)
+    context.canvas.toBlob(resolve, "image/jpeg", 0.9);
   });
 }
 
@@ -54,12 +54,12 @@ export const App = (props) => {
   const initalMessage = {
     "en": "What's your fashion today?",
     "ja": "今日のあなたのファッションは？",
-  }
+  };
 
   const fileUploadMessage = {
     "en": "Upload File",
     "ja": "ファイルアップロード",
-  }
+  };
 
   const chatDataInit = [{
     "user": "bot", "text": initalMessage[lang]
@@ -93,7 +93,7 @@ export const App = (props) => {
     const imageDataURL = await new FileReaderEx().readAsDataURL(imageBlob);
     const imageBase64 = imageDataURL.replace("data:", "").replace(/^.+,/, "");
     const data = await callBackend(imageBase64);
-    return data
+    return data;
   }
 
 
@@ -128,7 +128,7 @@ export const App = (props) => {
         elem = (
           <div key={i} className="typing">
             <img src={loading} alt="loading" style={{
-              width: "100px", marginLeft: "120px"}}/>
+              width: "100px", marginLeft: "120px"}} />
           </div>
         );          
       } else {
@@ -136,7 +136,8 @@ export const App = (props) => {
           <div key={i} className="bot" style={{
             width: "300px", padding: "10px",
             marginBottom: "20px", border: "1px solid #333333",
-            borderRadius: "10px"}}> {item.text}
+            borderRadius: "10px"}}>
+            {item.text}
           </div>
         );
       };
@@ -147,7 +148,7 @@ export const App = (props) => {
       const imageObjectURL = URL.createObjectURL(item.image);
       const elem = (
         <div key={i} className="image" align="right">
-          <img src={imageObjectURL} width="200" alt="user provided"/>
+          <img src={imageObjectURL} width="200" alt="user provided" />
         </div>
       );
       chatBody.push(elem);
@@ -161,7 +162,7 @@ export const App = (props) => {
           {fileUploadMessage[lang]}
         </button>
         <input ref={inputRef} hidden
-          type="file" accept="image/*" onChange={onFileInputChange}/>
+          type="file" accept="image/*" onChange={onFileInputChange} />
       </div>            
     );
     chatBody.push(elem);
@@ -176,7 +177,7 @@ export const App = (props) => {
         </>
   );
 
-  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   useEffect(() => {
     const scrollUp = async () => {
