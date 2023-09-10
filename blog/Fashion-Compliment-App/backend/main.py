@@ -19,20 +19,26 @@ def index():
     return 'GenAI fashion compliment service.'
 
 def get_image_description(image):
-    results = image_captioning_model.get_captions(
-        image=image,
-        number_of_results=3)
-    results.sort(key=len)
-    return results[-1]
+    try:
+        results = image_captioning_model.get_captions(
+            image=image,
+            number_of_results=3)
+        results.sort(key=len)
+        return results[-1]
+    except:
+        return None
 
 
 def get_fashion_items(image):
-    results = image_qna_model.ask_question(
-      image=image,
-      question='details of the fashion items in this picture.',
-      number_of_results=3)
-    results.sort(key=len)
-    return results[-1]
+    try:
+        results = image_qna_model.ask_question(
+            image=image,
+            question='details of the fashion items in this picture.',
+            number_of_results=3)
+        results.sort(key=len)
+        return results[-1]
+    except:
+        return None
 
 
 def get_compliment_message(image, lang='en'):
@@ -60,6 +66,14 @@ Fashion items: {}
 
     description = get_image_description(image)
     items = get_fashion_items(image)
+
+    if description is None:
+        if lang == 'en':
+            answer = 'Please upload another picture.'
+        if lang == 'ja':
+            answer = '他の画像をアップロードしてください。'
+        return answer
+
     answer = generation_model.predict(
         prompt.format(description, items),
         temperature=0.2, max_output_tokens=1024,
