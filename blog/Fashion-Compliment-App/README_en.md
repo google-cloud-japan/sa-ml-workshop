@@ -54,7 +54,7 @@ curl -X POST -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
 -s ${SERVICE_URL}/fashion-compliment-service/api/v1/get-compliment| jq .
 ```
 
-You will see the response similar to the following one.
+You will see a response similar to the following one.
 
 ```
 {
