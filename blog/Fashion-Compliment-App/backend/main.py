@@ -6,7 +6,7 @@ from flask import Flask, request
 from vertexai.preview.language_models import TextGenerationModel
 from vertexai.preview.vision_models import ImageQnAModel, ImageCaptioningModel, Image
 
-generation_model = TextGenerationModel.from_pretrained('text-bison@001')
+generation_model = TextGenerationModel.from_pretrained('text-bison@002')
 image_captioning_model = ImageCaptioningModel.from_pretrained('imagetext@001')
 image_qna_model = ImageQnAModel.from_pretrained('imagetext@001')
 
