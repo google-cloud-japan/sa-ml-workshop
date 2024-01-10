@@ -18,9 +18,9 @@ https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
 sudo apt-get update
 sudo apt-get install --upgrade -y nodejs git jq postgresql-client python3-pip
 
-# Copy the code directory under $HOME
+# Link the code directory under $HOME
 rm -rf $HOME/genAI_book
-cp -a $HOME/sa-ml-workshop/genAI_book $HOME/
+ln -s $HOME/sa-ml-workshop/genAI_book $HOME/genAI_book
 
 NUM_PACKAGES=$(apt list --installed \
   | grep -E "(^nodejs/|^git/|^jq/|^postgresql-client/|^python3-pip)" | wc -l)
