@@ -1,0 +1,27 @@
+html,
+body {
+  padding: 10px;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+button {
+  background-color: #0075c2;
+  border: 2px solid transparent;
+  color: white;
+  font-size: 1.0rem;
+  padding: 0.6rem;
+  margin: 0.6rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+button:active {
+  color: #0075c2;
+  background-color: white;
+  border: 2px solid #0075c2;
+}
+
+button:disabled {
+  background-color: #cccccc;
+}
