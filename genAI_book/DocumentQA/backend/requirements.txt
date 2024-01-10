@@ -6,7 +6,7 @@ google-cloud-aiplatform==1.30.1
 langchain==0.0.294
 pypdf==3.16.1
 cryptography==41.0.4
-transformers==4.34.0
+transformers==4.36.0
 SQLAlchemy==2.0.21
 pg8000==1.30.2
 cloud-sql-python-connector[pg8000]==1.4.2
