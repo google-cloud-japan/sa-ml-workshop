@@ -4,6 +4,6 @@ cloudevents==1.9.0
 google-cloud-storage==2.10.0
 google-cloud-aiplatform==1.30.1
 langchain==0.0.325
-pypdf==3.16.1
+pypdf==3.17.0
 cryptography==41.0.4
 transformers==4.36.0
