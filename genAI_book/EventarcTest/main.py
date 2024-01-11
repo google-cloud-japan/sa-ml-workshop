@@ -13,6 +13,7 @@ def process_event():
     filepath = event.data['name']
     filesize = event.data['size']
     content_type = event.data['contentType']
+    generation = event.data['generation']
 
     print('Event contents: {}'.format(event))
     print('Event ID: {}'.format(event_id))
@@ -21,5 +22,6 @@ def process_event():
     print('Filepath: {}'.format(filepath))
     print('File size: {}'.format(filesize))
     print('Content type: {}'.format(content_type))
-
+    print('Generation: {}'.format(generation))
+    
     return ('Succeeded', 200)
