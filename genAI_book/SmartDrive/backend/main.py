@@ -3,8 +3,8 @@ import tempfile
 from cloudevents.http import from_http
 from flask import Flask, request
 from google.cloud import storage
-from langchain.document_loaders import PyPDFLoader
-from langchain.llms import VertexAI
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.llms import VertexAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains import AnalyzeDocumentChain
@@ -18,8 +18,8 @@ app = Flask(__name__)
 # This is to preload the tokenizer module.
 qa_chain = load_qa_chain(llm, chain_type='map_reduce')
 qa_document_chain = AnalyzeDocumentChain(combine_docs_chain=qa_chain)
-_ = qa_document_chain.run(
-    input_document='I am feeling good.', question='How are you?')
+_ = qa_document_chain.invoke(
+        {'input_document': 'I am feeling good.', 'question': 'How are you?'})
 
 
 def download_from_gcs(bucket_name, filepath, filename):
@@ -83,8 +83,8 @@ def process_event():
         combine_docs_chain=qa_chain, text_splitter=text_splitter)
 
     prompt = '何についての文書ですか？日本語で200字程度にまとめて教えてください。'
-    description = qa_document_chain.run(
-        input_document=document, question=prompt)
+    description = qa_document_chain.invoke(
+        {'input_document': document, 'question': prompt})['output_text']
 
     print('{} - Description of {}: {}'.format(event_id, filename, description))
     with tempfile.NamedTemporaryFile() as tmp_file:
