@@ -37,7 +37,7 @@ gcloud builds submit --tag gcr.io/$PROJECT_ID/grammar-service
 gcloud run deploy grammar-service \
   --image gcr.io/$PROJECT_ID/grammar-service \
   --platform=managed --region=us-central1 \
-  --no-allow-unauthenticated
+  --allow-unauthenticated
 ```
 
 2. Send a request to the REST API to test the backend.
