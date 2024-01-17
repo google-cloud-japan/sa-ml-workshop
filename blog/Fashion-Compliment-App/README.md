@@ -40,7 +40,7 @@ gcloud builds submit --tag gcr.io/$PROJECT_ID/fashion-compliment-service
 gcloud run deploy fashion-compliment-service \
   --image gcr.io/$PROJECT_ID/fashion-compliment-service \
   --platform=managed --region=us-central1 \
-  --allow-unauthenticated
+  --no-allow-unauthenticated
 ```
 
 2. テスト画像を用いて、バックエンドサービスをテストします。
