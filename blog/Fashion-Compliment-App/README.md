@@ -142,4 +142,5 @@ firebase deploy
 ```
 cd $HOME/sa-ml-workshop/blog/Fashion-Compliment-App
 firebase hosting:disable
+gcloud run services delete fashion-compliment-service --platform=managed --region=us-central1
 ```
