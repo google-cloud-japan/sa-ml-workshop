@@ -134,4 +134,5 @@ The deployed web application is accessible from the public internet. To avoid sc
 ```
 cd $HOME/sa-ml-workshop/blog/LLM-Grammar-Service-APP
 firebase hosting:disable
+gcloud run services delete grammar-service --platform=managed --region=us-central1
 ```
