@@ -1,9 +1,11 @@
 Flask==2.3.2
 gunicorn==21.2.0
 cloudevents==1.9.0
-google-cloud-storage==2.10.0
-google-cloud-aiplatform==1.36.1
+google-cloud-storage==2.14.0
+google-cloud-aiplatform==1.39.0
 langchain==0.1.0
+langchain-community==0.0.11
+langchain-google-vertexai==0.0.5
 pypdf==3.17.0
 cryptography==42.0.2
 transformers==4.36.0
