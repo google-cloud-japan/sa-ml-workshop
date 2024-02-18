@@ -8,8 +8,8 @@ from flask import Flask, request
 from google.cloud import storage
 from google.cloud.sql.connector import Connector
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.embeddings import VertexAIEmbeddings
-from langchain_community.llms import VertexAI
+from langchain_google_vertexai.embeddings import VertexAIEmbeddings
+from langchain_google_vertexai import VertexAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains import AnalyzeDocumentChain
