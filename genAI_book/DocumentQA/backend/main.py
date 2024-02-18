@@ -139,7 +139,7 @@ def process_event():
     page_contents = [
         page.page_content.encode('utf-8').replace(b'\x00', b'').decode('utf-8')
         for page in pages]
-    embedding_vectors = embeddings.embed_documents(page_contents)
+    embedding_vectors = embeddings.embed_documents(page_contents, batch_size=10)
     for c, embedding_vector in enumerate(embedding_vectors):
         page = c+1
         insert_doc(docid, uid, filename, page,
