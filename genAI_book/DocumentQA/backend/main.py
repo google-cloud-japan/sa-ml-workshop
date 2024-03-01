@@ -16,10 +16,11 @@ from langchain.chains import AnalyzeDocumentChain
 
 storage_client = storage.Client()
 llm = VertexAI(
-    model_name='text-bison@001',
+    model_name='text-bison@001', location='asia-northeast1',
     temperature=0.1, max_output_tokens=1024)
 embeddings = VertexAIEmbeddings(
-    model_name='textembedding-gecko-multilingual@001')
+    model_name='textembedding-gecko-multilingual@001',
+    location='asia-northeast1')
 app = Flask(__name__)
 
 # This is to preload the tokenizer module.
@@ -41,7 +42,6 @@ INSTANCE_CONNECTION_NAME = '{}:{}:{}'.format(
     PROJECT_ID, DB_REGION, DB_INSTANCE_NAME)
 
 connector = Connector()
-
 def getconn():
     conn = connector.connect(
         INSTANCE_CONNECTION_NAME, 'pg8000',
