@@ -21,7 +21,7 @@ export default function LoginMenuPage() {
     element = (
       <>
         <h1>Welcome, {loginUser.displayName}!</h1>
-	<button onClick={() => signOut(auth)}>Logout</button>
+        <button onClick={() => signOut(auth)}>Logout</button>
       </>
     );
   } else {
