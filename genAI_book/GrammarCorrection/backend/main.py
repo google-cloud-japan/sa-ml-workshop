@@ -23,7 +23,7 @@ def grammar_correction():
     text = ' '.join(text.splitlines())
 
     prompt = '''\
-「text:」以下の英文を正しい英文法の文章に書き直してください。
+「text:」以下の英文を正しい英文法の文章に書き直してください。書き直した文章のみを出力すること。
 
 text: {}
 '''.format(text)
@@ -32,7 +32,6 @@ text: {}
     prompt = '''\
 「text:」以下の英文をより自然で洗練された英文に書き直した例を３つ示してください。
 
-回答例
 text: I went to school yesterday. I ate an apple for lunch. I like eat apple.
 answer:
 - I went to school yesterday. I had an apple for lunch. I love apples.
