@@ -23,7 +23,8 @@ def grammar_correction():
     text = ' '.join(text.splitlines())
 
     prompt = '''\
-「text:」以下の英文を正しい英文法の文章に書き直してください。書き直した文章のみを出力すること。
+「text:」以下の英文を正しい英文法の文章に書き直してください。
+書き直した文章のみを出力すること。
 
 text: {}
 '''.format(text)
