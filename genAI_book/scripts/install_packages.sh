@@ -39,9 +39,7 @@ sudo apt-get update
 sudo apt-get install --upgrade -y nodejs git jq postgresql-client python3-pip
 
 # Remove EXTERNALLY-MANAGED file to allow pip3 install
-for file in $(ls /usr/lib/python3\.*/EXTERNALLY-MANAGED); do
-  sudo rm -f $file
-done
+find /usr/lib/python3\.* -name "EXTERNALLY-MANAGED" | xargs sudo rm -f
 
 # Final check
 NUM_PACKAGES=$(apt list --installed \
