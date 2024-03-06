@@ -38,6 +38,11 @@ https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
 sudo apt-get update
 sudo apt-get install --upgrade -y nodejs git jq postgresql-client python3-pip
 
+# Remove EXTERNALLY-MANAGED file to allow pip3 install
+for file in $(ls /usr/lib/python3\.*/EXTERNALLY-MANAGED); do
+  sudo rm -f $file
+done
+
 # Final check
 NUM_PACKAGES=$(apt list --installed \
   | grep -E "(^nodejs/|^git/|^jq/|^postgresql-client/|^python3-pip)" | wc -l)
