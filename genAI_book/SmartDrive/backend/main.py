@@ -11,7 +11,7 @@ from langchain.chains import AnalyzeDocumentChain
 
 storage_client = storage.Client()
 llm = VertexAI(
-    model_name='text-bison@002',
+    model_name='text-bison@002', location='asia-northeast1',
     temperature=0.1, max_output_tokens=1024)
 app = Flask(__name__)
 
