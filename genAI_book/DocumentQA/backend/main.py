@@ -16,7 +16,7 @@ from langchain.chains import AnalyzeDocumentChain
 
 storage_client = storage.Client()
 llm = VertexAI(
-    model_name='text-bison@001', location='asia-northeast1',
+    model_name='text-bison@002', location='asia-northeast1',
     temperature=0.1, max_output_tokens=1024)
 embeddings = VertexAIEmbeddings(
     model_name='textembedding-gecko-multilingual@001',
