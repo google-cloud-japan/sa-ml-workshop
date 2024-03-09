@@ -107,7 +107,7 @@ def process_event():
     uid = filepath.split('/')[0]
     docid = '{}:{}/{}'.format(uid, bucket_name, filepath)
 
-    # Check if the file is pdf.
+    # Check if the file is pdf
     if content_type != 'application/pdf':
         print('{} - {} is not a pdf file.'.format(event_id, filepath))
         return ('This is not a pdf file.', 200)
