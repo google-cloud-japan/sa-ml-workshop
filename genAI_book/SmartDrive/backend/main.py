@@ -45,7 +45,7 @@ def process_event():
     content_type = event.data['contentType']
     print('{} - Uploaded file: {}'.format(event_id, filepath))
 
-    # Check if the file is pdf.
+    # Check if the file is pdf
     if content_type != 'application/pdf':
         print('{} - {} is not a pdf file.'.format(event_id, filepath))
         return ('This is not a pdf file.', 200)
@@ -55,7 +55,7 @@ def process_event():
         print('{} - {} is too large.'.format(event_id, filepath))
         return ('File is too large.', 200)
 
-    # Construct a new filename for summary text.
+    # Construct a new filename for summary text
     directory = os.path.dirname(filepath)
     filename = os.path.basename(filepath)
     filename_body, _ = os.path.splitext(filename)
