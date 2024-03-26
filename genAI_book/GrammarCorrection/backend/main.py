@@ -2,7 +2,7 @@ import json
 import os
 import vertexai
 from flask import Flask, request
-from vertexai.preview.language_models import TextGenerationModel
+from vertexai.language_models import TextGenerationModel
 
 vertexai.init(location='asia-northeast1')
 generation_model = TextGenerationModel.from_pretrained('text-bison@002')
