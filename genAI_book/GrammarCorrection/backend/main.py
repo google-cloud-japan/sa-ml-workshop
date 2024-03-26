@@ -19,7 +19,7 @@ def get_response(prompt, temperature=0.2):
 def grammar_correction():
     json_data = request.get_json()
     text = json_data['text']
-    # Join multiple lines into a single line.
+    # Join multiple lines into a single line
     text = ' '.join(text.splitlines())
 
     prompt = '''\
