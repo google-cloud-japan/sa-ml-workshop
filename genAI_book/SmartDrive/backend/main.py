@@ -15,7 +15,7 @@ llm = VertexAI(
     temperature=0.1, max_output_tokens=1024)
 app = Flask(__name__)
 
-# This is to preload the tokenizer module.
+# This is to preload the tokenizer module
 qa_chain = load_qa_chain(llm, chain_type='map_reduce')
 qa_document_chain = AnalyzeDocumentChain(combine_docs_chain=qa_chain)
 _ = qa_document_chain.invoke(
