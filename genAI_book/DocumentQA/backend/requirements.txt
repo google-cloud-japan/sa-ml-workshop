@@ -7,7 +7,7 @@ langchain==0.1.0
 langchain-google-vertexai==0.0.5
 pypdf==3.17.0
 cryptography==42.0.4
-transformers==4.36.0
+transformers==4.38.0
 SQLAlchemy==2.0.21
 pg8000==1.30.4
 cloud-sql-python-connector[pg8000]==1.7.0
