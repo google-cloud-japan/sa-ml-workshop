@@ -31,7 +31,7 @@ text: {}
     corrected = get_response(prompt)
 
     prompt = '''\
-「text:」以下の英文をより自然で洗練された英文に書き直した例を３つ示してください。
+「text:」以下の英文をより自然で洗練された英文に書き直した例を３つ示してください。書き直した文章のみを出力すること。
 
 text: I went to school yesterday. I ate an apple for lunch. I like eat apple.
 answer:
