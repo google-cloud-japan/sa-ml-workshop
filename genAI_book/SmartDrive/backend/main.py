@@ -11,7 +11,7 @@ from langchain.chains import AnalyzeDocumentChain
 
 storage_client = storage.Client()
 llm = VertexAI(
-    model_name='text-bison@002', location='asia-northeast1',
+    model_name='gemini-1.5-flash-001', location='asia-northeast1',
     temperature=0.1, max_output_tokens=1024)
 app = Flask(__name__)
 
@@ -82,7 +82,7 @@ def process_event():
     qa_document_chain = AnalyzeDocumentChain(
         combine_docs_chain=qa_chain, text_splitter=text_splitter)
 
-    prompt = '何についての文書ですか？日本語で200字程度にまとめて教えてください。'
+    prompt = 'これは何についての文書ですか？日本語で200字程度にまとめて教えてください。結果のみを出力すること。'
     description = qa_document_chain.invoke(
         {'input_document': document, 'question': prompt})['output_text']
 
