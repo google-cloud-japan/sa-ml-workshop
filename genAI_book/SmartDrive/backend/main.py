@@ -82,9 +82,9 @@ def process_event():
     qa_document_chain = AnalyzeDocumentChain(
         combine_docs_chain=qa_chain, text_splitter=text_splitter)
 
-    prompt = 'これは何についての文書ですか？日本語で200字程度にまとめて教えてください。結果のみを出力すること。'
+    prompt = 'この文書の概要を日本語で200字程度にまとめて教えてください。'
     description = qa_document_chain.invoke(
-        {'input_document': document, 'question': prompt})['output_text']
+        {'input_document': document, 'question': prompt})['output_text'].replace('FINAL ANSWER: ', '')
 
     print('{} - Description of {}: {}'.format(event_id, filename, description))
     with tempfile.NamedTemporaryFile() as tmp_file:
