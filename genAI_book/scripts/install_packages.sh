@@ -67,8 +67,10 @@ echo -e '
 ください。\e[m
 
 書籍に記載のコードとの差分については、以下のリンクを参照してください。
-
 https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/README.md
+
+出版社のサイトに記載の正誤表も事前に確認するようにお願いします。
+https://gihyo.jp/book/2024/978-4-297-14171-4/support
 ***********************************************************************************
 
 '
