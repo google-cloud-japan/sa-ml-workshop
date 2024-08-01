@@ -77,12 +77,12 @@ def process_event():
         return ('File is not accessible.', 200)
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=4000, chunk_overlap=200)
+        chunk_size=10000, chunk_overlap=400)
     qa_chain = load_qa_chain(llm, chain_type='map_reduce')
     qa_document_chain = AnalyzeDocumentChain(
         combine_docs_chain=qa_chain, text_splitter=text_splitter)
 
-    prompt = 'この文書の概要を日本語で200字程度にまとめて教えてください。'
+    prompt = '何についての文書ですか？日本語で200字程度にまとめて教えてください。'
     description = qa_document_chain.invoke(
         {'input_document': document, 'question': prompt})['output_text'].replace('FINAL ANSWER: ', '')
 
