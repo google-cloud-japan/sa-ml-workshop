@@ -4,15 +4,23 @@
 
 Disclaimer: This is not an official Google product
 
-# PaLM API から Gemini API への移行について
-2024/07/31 PaLM API が廃止予定のため Gemini API を使用するようにコードを修正中です。
+# PaLM2 から Gemini への移行について
+**2024年8月2日記載**
+
+本書では Google Cloud で提供される大規模言語モデル PaLM2 (text-bison) を使用していますが、今後 PaLM2 が提供終了の予定となっており、後継の Gemini への移行が必要となります。そのため、このリポジトリ内のコードとノートブックは、Gemini (gemini-1.5-flash) を使用するようにコードの修正が行われています。
+
+書籍に記載のコードをそのまま入力するのではなく、このリポジトリ内のコードをコピーして使用することをお勧めします。
 
 主な変更内容は、次の通りです。
 - PaLM2 と Gemini で API を呼び出す際に使用するモジュールが異なります。
 - 使用モデルの変更にあわせて一部のプロンプトとパラメーター値を微調整しています。
 - 一部のパッケージのバージョンを更新しています。
 
-## 変更箇所一覧
+
+出版社のサイトに記載の[正誤表](https://gihyo.jp/book/2024/978-4-297-14171-4/support)もあわせて確認するようにお願いします。
+
+## 書籍内容の変更箇所
+コードの変更に伴って、書籍の内容を読み替える必要がある部分を示します。
 - ファイル名は、ディレクトリ `genAI_book` 以下のパスを示します。
 - その方がわかりやすい場合は、変更箇所の前後を含めて記載しています。
 
@@ -325,7 +333,7 @@ print(response.safety_attributes)
 ```
   1 def get_description(document):
   2     text_splitter = RecursiveCharacterTextSplitter(
-  3         chunk_size=10000, chunk_overlap=400)
+  3         chunk_size=6000, chunk_overlap=200)
 ...
  11     return description['output_text'].replace('FINAL ANSWER: ', '')
 ```
@@ -386,4 +394,39 @@ print(response.safety_attributes)
 ...
  86     description = qa_document_chain.invoke(
  87         {'input_document': document, 'question': prompt})['output_text'].replace('FINAL ANSWER: ', '')
+```
+
+### 5.1.2 ノートブックでのプロトタイピング
+ノートブックファイル [`Notebooks/Document QA.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Document%20QA.ipynb)
+
+**p.168**
+- 変更前
+```
+  1 !pip install --user \
+  2   langchain==0.1.0 transformers==4.36.0 \
+  3   pypdf==3.17.0 cryptography==42.0.4 \
+  4   pg8000==1.30.4 cloud-sql-python-connector[pg8000]==1.7.0 \
+  5   langchain-google-vertexai==0.0.5 \
+  6   google-cloud-aiplatform==1.39.0
+```
+- 変更後
+```
+  1 !pip install --user \
+  2   langchain==0.1.0 transformers==4.36.0 \
+  3   pypdf==3.17.0 cryptography==42.0.4 \
+  4   pg8000==1.30.4 cloud-sql-python-connector[pg8000]==1.7.0 \
+  5   langchain-google-vertexai==0.0.6 \
+  6   google-cloud-aiplatform==1.42.1
+```
+
+**p.174**
+- 変更前
+```
+  6 llm = VertexAI(model_name='text-bison@002', location='asia-northeast1',
+  7                temperature=0.1, max_output_tokens=256)
+```
+- 変更後
+```
+  6 llm = VertexAI(model_name='gemini-1.5-flash-001', location='asia-northeast1',
+  7                temperature=0.1, max_output_tokens=256)
 ```
