@@ -77,7 +77,7 @@ def process_event():
         return ('File is not accessible.', 200)
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=10000, chunk_overlap=400)
+        chunk_size=6000, chunk_overlap=200)
     qa_chain = load_qa_chain(llm, chain_type='map_reduce')
     qa_document_chain = AnalyzeDocumentChain(
         combine_docs_chain=qa_chain, text_splitter=text_splitter)
