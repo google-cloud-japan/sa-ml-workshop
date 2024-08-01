@@ -6,7 +6,7 @@ Disclaimer: This is not an official Google product
 
 2024/07/31 PaLM API が廃止予定のため Gemini API を使用するようにコードを修正中です。
 
-- PaLM2 と Gemini で API を呼び出すのに使用するモジュールが異なります。
+- PaLM2 と Gemini で API を呼び出す際に使用するモジュールが異なります。
 - 使用モデルの変更にあわせて一部のプロンプトを微調整しています。
 - 一部のパッケージのバージョンを更新しています。
 
