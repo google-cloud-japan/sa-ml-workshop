@@ -6,13 +6,15 @@ Disclaimer: This is not an official Google product
 
 2024/07/31 PaLM API が廃止予定のため Gemini API を使用するようにコードを修正中です。
 
-あわせて、パッケージのバージョンを更新している箇所もあります。
+- PaLM2 と Gemini で API を呼び出すのに使用するモジュールが異なります。
+- 使用モデルの変更にあわせて一部のプロンプトを微調整しています。
+- 一部のパッケージのバージョンを更新しています。
 
 ## 変更箇所一覧
 ファイル名は、ディレクトリ `genAI_book` 以下のパスを示します。
 
 ### 2.2.2 静的 Web ページ作成
- p.24 ファイル `TestApp/src/package.json`
+ p.24 ファイル [`TestApp/src/package.json`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/TestApp/src/package.json)
 - 変更前
 ```
   9     "next": "14.0.4",
@@ -22,14 +24,14 @@ Disclaimer: This is not an official Google product
   9     "next": "14.2.5",
 ```
 
-### 3.1.1 Vertex AI StudioでPaLM APIを体験
+### 3.1.1 Vertex AI Studio で PaLM API を体験
 リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
 
 p.66 本文
 - 変更前：「text-bison@002」が安定版の推奨モデルになっていますので、
 - 変更後：「gemini-1.5-flash-001」が安定版の推奨モデルになっていますので、
 
-### 3.1.2 Python SDKによるPaLM APIの利用
+### 3.1.2 Python SDK による PaLM API の利用
 リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
 
 p.74 本文
@@ -72,7 +74,7 @@ print(response.safety_attributes)
 ```
 
 ### 3.2.1 ノートブックでのプロトタイピング
-ノートブックファイル `Notebooks/Grammar Correction with PaLM API.ipynb`
+ノートブックファイル [`Notebooks/Grammar Correction with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Grammar%20Correction%20with%20PaLM%20API.ipynb)
 
 p.77
 - 変更前
