@@ -9,7 +9,7 @@ Disclaimer: This is not an official Google product
 
 主な変更内容は、次の通りです。
 - PaLM2 と Gemini で API を呼び出す際に使用するモジュールが異なります。
-- 使用モデルの変更にあわせて一部のプロンプトを微調整しています。
+- 使用モデルの変更にあわせて一部のプロンプトとパラメーター値を微調整しています。
 - 一部のパッケージのバージョンを更新しています。
 
 ## 変更箇所一覧
@@ -382,7 +382,7 @@ print(response.safety_attributes)
 - 変更後
 ```
  79     text_splitter = RecursiveCharacterTextSplitter(
- 80         chunk_size=8000, chunk_overlap=400)
+ 80         chunk_size=6000, chunk_overlap=200)
 ...
  86     description = qa_document_chain.invoke(
  87         {'input_document': document, 'question': prompt})['output_text'].replace('FINAL ANSWER: ', '')
