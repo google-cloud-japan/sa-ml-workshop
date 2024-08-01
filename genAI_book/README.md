@@ -9,9 +9,10 @@ Disclaimer: This is not an official Google product
 あわせて、パッケージのバージョンを更新している箇所もあります。
 
 ## 変更箇所一覧
+ファイル名は、ディレクトリ `genAI_book` 以下のパスを示します。
 
 ### 2.2.2 静的 Web ページ作成
- p.24 ファイル `package.json`
+ p.24 ファイル `TestApp/src/package.json`
 - 変更前
 ```
   9     "next": "14.0.4",
@@ -22,11 +23,15 @@ Disclaimer: This is not an official Google product
 ```
 
 ### 3.1.1 Vertex AI StudioでPaLM APIを体験
+リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
+
 p.66 本文
 - 変更前：「text-bison@002」が安定版の推奨モデルになっていますので、
 - 変更後：「gemini-1.5-flash-001」が安定版の推奨モデルになっていますので、
 
 ### 3.1.2 Python SDKによるPaLM APIの利用
+リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
+
 p.74 本文
 - 変更前
 ```
