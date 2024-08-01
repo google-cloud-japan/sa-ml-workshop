@@ -17,7 +17,9 @@ Disclaimer: This is not an official Google product
 - その方がわかりやすい場合は、変更箇所の前後を含めて記載しています。
 
 ### 2.2.2 静的 Web ページ作成
-**p.24 ファイル** [`TestApp/src/package.json`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/TestApp/src/package.json)
+ファイル [`TestApp/src/package.json`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/TestApp/src/package.json)
+
+**p.24**
 - 変更前
 ```
   9     "next": "14.0.4",
@@ -30,14 +32,14 @@ Disclaimer: This is not an official Google product
 ### 3.1.1 Vertex AI Studio で PaLM API を体験
 リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
 
-**p.66 本文**
+**p.66**
 - 変更前：「text-bison@002」が安定版の推奨モデルになっていますので、
 - 変更後：「gemini-1.5-flash-001」が安定版の推奨モデルになっていますので、
 
 ### 3.1.2 Python SDK による PaLM API の利用
 リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
 
-**p.74 本文**
+**p.74**
 - 変更前
 ```
   1 from vertexai.language_models import TextGenerationModel
@@ -49,7 +51,7 @@ Disclaimer: This is not an official Google product
   2 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
 ```
 
-**p.75 本文**
+**p.75**
 - 変更前
 ```
   1 def get_response(prompt):
@@ -65,7 +67,7 @@ Disclaimer: This is not an official Google product
   4     return response
 ```
 
-**p.76 本文**
+**p.76**
 - 変更前
 ```
 print(response.safety_attributes)
@@ -77,7 +79,7 @@ print(response.safety_attributes)
 ```
 
 ### 3.2.1 ノートブックでのプロトタイピング
-**ノートブックファイル** [`Notebooks/Grammar Correction with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Grammar%20Correction%20with%20PaLM%20API.ipynb)
+ノートブックファイル [`Notebooks/Grammar Correction with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Grammar%20Correction%20with%20PaLM%20API.ipynb)
 
 **p.77**
 - 変更前
@@ -118,7 +120,9 @@ print(response.safety_attributes)
 ```
 
 ### 3.2.2 バックエンドの実装
-**p.81 ファイル** [`GrammarCorrection/backend/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/requirements.txt)
+ファイル [`GrammarCorrection/backend/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/requirements.txt)
+
+**p.81**
 - 変更前
 ```
   2 gunicorn==21.2.0
@@ -130,7 +134,9 @@ print(response.safety_attributes)
   3 google-cloud-aiplatform==1.42.1
 ```
 
-**p.84 ファイル** [`GrammarCorrection/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/main.py)
+ファイル [`GrammarCorrection/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/main.py)
+
+**p.84**
 - 変更前
 ```
   5 from vertexai.language_models import TextGenerationModel
@@ -143,7 +149,7 @@ print(response.safety_attributes)
  14         prompt, temperature=temperature, max_output_tokens=1024)
  15     return response.text.lstrip()
 ...
- 33 prompt = '''\
+ 33     prompt = '''\
  34 「text:」以下の英文をより自然で洗練された英文に書き直した例を3つ示してください。
 ```
 - 変更後
@@ -158,10 +164,29 @@ print(response.safety_attributes)
  14         prompt, generation_config={'temperature': temperature, 'max_output_tokens': 1024})
  15     return response.text.lstrip()
 ...
- 33 prompt = '''\
+ 33     prompt = '''\
  34 「text:」以下の英文をより自然で洗練された英文に書き直した例を3つ示してください。書き直した文章のみを出力すること。
 ```
 
+### 3.3.2 ノートブックでのプロトタイピング
+ノートブックファイル [`Notebooks/Fashion Compliment.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Fashion%20Compliment.ipynb)
 
-
-
+**p.108**
+- 変更前
+```
+  1 from vertexai.language_models import TextGenerationModel
+  2 generation_model = TextGenerationModel.from_pretrained('text-bison@002')
+...
+ 16     response = generation_model.predict(
+ 17         prompt.format(description, items),
+ 18         temperature=0.2, max_output_tokens=1024)
+```
+- 変更後
+```
+  1 from vertexai import generative_models
+  2 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
+...
+ 16     response = generation_model.generate_content(
+ 17         prompt.format(description, items),
+ 18         generation_config={'temperature': 0.2, 'max_output_tokens': 1024})
+```
