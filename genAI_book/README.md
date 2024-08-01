@@ -190,3 +190,150 @@ print(response.safety_attributes)
  17         prompt.format(description, items),
  18         generation_config={'temperature': 0.2, 'max_output_tokens': 1024})
 ```
+
+### 3.3.3 Web アプリケーションの実装
+ファイル [`FashionCompliment/backend/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/requirements.txt)
+
+**p.109**
+- 変更前
+```
+  2 gunicorn==21.2.0
+  3 google-cloud-aiplatform==1.36.1
+```
+- 変更後
+```
+  2 gunicorn==22.0.0
+  3 google-cloud-aiplatform==1.42.1
+```
+
+ファイル [`FashionCompliment/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/main.py)
+
+**p.110, p.111**
+- 変更前
+```
+  6 from vertexai.language_models import TextGenerationModel
+...
+ 12 generation_model = TextGenerationModel.from_pretrained('text-bison@002')
+...
+ 57     response = generation_model.predict(
+ 58         prompt.format(description, items),
+ 59         temperature=0.2, max_output_tokens=1024)
+```
+- 変更後
+```
+  6 from vertexai import generative_models
+...
+ 12 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
+...
+ 57     response = generation_model.generate_content(
+ 58         prompt.format(description, items),
+ 59         generation_config={'temperature': 0.2, 'max_output_tokens': 1024})
+```
+
+### 4.1.1 LangChain 入門
+ノートブックファイル [`Notebooks/LangChain with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/LangChain%20with%20PaLM%20API.ipynb)
+
+**p.125**
+- 変更前
+```
+  1 !pip install --user \
+  2   langchain==0.1.0 langchain-google-vertexai==0.0.5 \
+  3   google-cloud-aiplatform==1.39.0
+```
+- 変更後
+```
+  1 !pip install --user \
+  2   langchain==0.1.0 langchain-google-vertexai==0.0.6 \
+  3   google-cloud-aiplatform==1.42.1
+```
+
+**p.126**
+- 変更前
+```
+ 13 次の製品名を考えてください。
+ 14 製品の説明:{description}
+ 15 出力:
+ 16 """
+```
+- 変更後
+```
+ 13 次の製品名を考えてください。
+ 14 製品の説明:{description}
+ 15 """
+ 16
+```
+
+**p.126**
+- 変更前
+```
+  1 from langchain_google_vertexai import VertexAI
+  2 llm = VertexAI(model_name='text-bison@002', location='asia-northeast1',
+  3                temperature=0.4, max_output_tokens=128)
+```
+- 変更後
+```
+  1 from langchain_google_vertexai import VertexAI
+  2 llm = VertexAI(model_name='gemini-1.5-flash-001', location='asia-northeast1',
+  3                temperature=0.4, max_output_tokens=128)
+```
+
+### 4.1.2 PDF 文書の要約
+ノートブックファイル [`Notebooks/PDF Summarization.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/PDF%20Summarization.ipynb)
+
+**p.132**
+- 変更前
+```
+  1 !pip install --user \
+  2   langchain==0.1.0 transformers==4.36.0 \
+  3   pypdf==3.17.0 cryptography==42.0.4 \
+  4   langchain-google-vertexai==0.0.5 \
+  5   google-cloud-aiplatform==1.39.0
+```
+- 変更後
+```
+  1 !pip install --user \
+  2   langchain==0.1.0 transformers==4.36.0 \
+  3   pypdf==3.17.0 cryptography==42.0.4 \
+  4   langchain-google-vertexai==0.0.6 \
+  5   google-cloud-aiplatform==1.42.1
+```
+
+**p.133**
+- 変更前
+```
+  1 from langchain_google_vertexai import VertexAI
+  2 llm = VertexAI(model_name='text-bison@002', location='asia-northeast1',
+  3                temperature=0.1, max_output_tokens=128)
+```
+- 変更後
+```
+  1 from langchain_google_vertexai import VertexAI
+  2 llm = VertexAI(model_name='gemini-1.5-flash-001', location='asia-northeast1',
+  3                temperature=0.1, max_output_tokens=128)
+```
+
+**p.135**
+- 変更前
+```
+  8     prompt = '何についての文書ですか?日本語で200字程度にまとめて教えてください。'
+  9     description = qa_document_chain.invoke(
+ 10         {'input_document': document, 'question': prompt})
+ 11     return description['output_text']
+```
+- 変更後
+```
+  8     prompt = 'この文書の概要を日本語で200字程度にまとめて教えてください。'
+  9     description = qa_document_chain.invoke(
+ 10         {'input_document': document, 'question': prompt})
+ 11     return description['output_text'].replace('FINAL ANSWER: ', '')
+```
+
+**p.135**
+- 変更前
+```
+  8     prompt = '{} 日本語で200字程度にまとめて教えてください。'.format(question)
+```
+- 変更後
+```
+  8     prompt = '{} 日本語で200字程度にまとめて教えてください。マークダウンを使用せずにプレーンテキストで出力。'.format(question)'
+```
