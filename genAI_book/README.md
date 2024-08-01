@@ -315,16 +315,18 @@ print(response.safety_attributes)
 **p.135**
 - 変更前
 ```
-  8     prompt = '何についての文書ですか?日本語で200字程度にまとめて教えてください。'
-  9     description = qa_document_chain.invoke(
- 10         {'input_document': document, 'question': prompt})
+  1 def get_description(document):
+  2     text_splitter = RecursiveCharacterTextSplitter(
+  3         chunk_size=4000, chunk_overlap=200)
+...
  11     return description['output_text']
 ```
 - 変更後
 ```
-  8     prompt = 'この文書の概要を日本語で200字程度にまとめて教えてください。'
-  9     description = qa_document_chain.invoke(
- 10         {'input_document': document, 'question': prompt})
+  1 def get_description(document):
+  2     text_splitter = RecursiveCharacterTextSplitter(
+  3         chunk_size=10000, chunk_overlap=400)
+...
  11     return description['output_text'].replace('FINAL ANSWER: ', '')
 ```
 
@@ -336,4 +338,52 @@ print(response.safety_attributes)
 - 変更後
 ```
   8     prompt = '{} 日本語で200字程度にまとめて教えてください。マークダウンを使用せずにプレーンテキストで出力。'.format(question)'
+```
+
+### 4.2.1 Eventarc によるイベント連携
+ファイル [`EventarcTest/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/EventarcTest/requirements.txt)
+
+**p.141**
+- 変更前
+```
+  2 gunicorn==21.2.0
+```
+- 変更後
+```
+  2 gunicorn==22.0.0
+```
+
+### 4.2.2 Web アプリケーションの実装
+ファイル [`FashionCompliment/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/SmartDrive/backend/main.py)
+
+**p.147**
+- 変更前
+```
+ 13 llm = VertexAI(
+ 14     model_name='text-bison@002', location='asia-northeast1',
+ 15     temperature=0.1, max_output_tokens=1024)
+```
+- 変更後
+```
+ 13 llm = VertexAI(
+ 14     model_name='gemini-1.5-flash-001', location='asia-northeast1',
+ 15     temperature=0.1, max_output_tokens=1024)
+```
+
+**p.150, p.151**
+- 変更前
+```
+ 79     text_splitter = RecursiveCharacterTextSplitter(
+ 80         chunk_size=4000, chunk_overlap=200)
+...
+ 86     description = qa_document_chain.invoke(
+ 87         {'input_document': document, 'question': prompt})['output_text']
+```
+- 変更後
+```
+ 79     text_splitter = RecursiveCharacterTextSplitter(
+ 80         chunk_size=8000, chunk_overlap=400)
+...
+ 86     description = qa_document_chain.invoke(
+ 87         {'input_document': document, 'question': prompt})['output_text'].replace('FINAL ANSWER: ', '')
 ```
