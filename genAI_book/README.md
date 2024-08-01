@@ -70,3 +70,46 @@ print(response.safety_attributes)
 {str(item.category).split('.')[1]: item.probability_score
  for item in response.candidates[0].safety_ratings}
 ```
+
+### 3.2.1 ノートブックでのプロトタイピング
+ノートブックファイル `Notebooks/Grammar Correction with PaLM API.ipynb`
+
+p.77
+- 変更前
+```
+  1 import vertexai
+  2 from vertexai.language_models import TextGenerationModel
+  3
+  4 vertexai.init(location='asia-northeast1')
+  5 generation_model = TextGenerationModel.from_pretrained('text-bison@002')
+  6
+  7 def get_response(prompt, temperature=0.2):
+  8     response = generation_model.predict(
+  9         prompt, temperature=temperature, max_output_tokens=1024)
+ 10     return response.text.lstrip()
+```
+- 変更後
+```
+  1 import vertexai
+  2 from vertexai import generative_models
+  3
+  4 vertexai.init(location='asia-northeast1')
+  5 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
+  6
+  7 def get_response(prompt, temperature=0.2):
+  8     response = generation_model.generate_content(
+  9         prompt, generation_config={'temperature': temperature, 'max_output_tokens': 1024})
+ 10     return response.text.lstrip()
+```
+
+p.79
+- 変更前
+```
+  1 prompt = '''\
+  2 「text:」以下の英文をより自然で洗練された英文に書き直した例を3つ示してください。
+```
+- 変更後
+```
+  1 prompt = '''\
+  2 「text:」以下の英文をより自然で洗練された英文に書き直した例を3つ示してください。書き直した文章のみを出力すること。
+```
