@@ -20,3 +20,8 @@ Disclaimer: This is not an official Google product
 ```
   9     "next": "14.2.5",
 ```
+
+### 3.1.1 Vertex AI StudioでPaLM APIを体験
+p.66 本文
+- 変更前：「text-bison@002」が安定版の推奨モデルになっていますので、
+- 変更後：「gemini-1.5-flash-001」が安定版の推奨モデルになっていますので、
