@@ -50,7 +50,8 @@ if [[ $NUM_PACKAGES != 5 ]]; then
 fi
 echo "Succeeded."
 
-echo -e '
+# Login message
+cat <<'EOF' > ~/.login_message
 
 ***********************************************************************************
 2024年8月1日記載
@@ -72,5 +73,15 @@ https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/README
 出版社のサイトに記載の正誤表も事前に確認するようにお願いします。
 https://gihyo.jp/book/2024/978-4-297-14171-4/support
 ***********************************************************************************
+EOF
 
-'
+if ! grep "# Login message" ~/.bashrc; then
+  cat <<'EOF' >> ~/.bashrc
+# Login message
+message=$(cat ~/.login_message)
+echo -e "$message"
+EOF
+fi
+
+message=$(cat ~/.login_message)
+echo -e "$message"
