@@ -58,8 +58,8 @@ cat <<'EOF' > ~/.login_message
 
 　　　　「Google Cloud で学ぶ生成 AI アプリケーション開発入門」読者の方へ
 
-本書では Google Cloud で提供される大規模言語モデル PaLM2 (text-bison) を使用していま
-すが、今後 PaLM2 が提供終了の予定となっており、後継の Gemini への移行が必要となり
+本書では Google Cloud で提供される大規模言語モデル PaLM 2 (text-bison) を使用していま
+すが、今後 PaLM 2 が提供終了の予定となっており、後継の Gemini への移行が必要となり
 ます。
 
 そのため、サンプルコード用リポジトリ内のコードとノートブックは、Gemini (gemini-1.5
