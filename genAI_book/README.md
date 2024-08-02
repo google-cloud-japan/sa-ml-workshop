@@ -20,6 +20,8 @@ Disclaimer: This is not an official Google product
 
 出版社のサイトに記載の[正誤表](https://gihyo.jp/book/2024/978-4-297-14171-4/support)もあわせて確認するようにお願いします。
 
+（修正前のコードは、ブランチ [`archive_PaLM_API`](https://github.com/google-cloud-japan/sa-ml-workshop/tree/archive_PaLM_API/genAI_book) に保存してあります。）
+
 ## 書籍内容の変更箇所
 コードの変更に伴って、書籍の内容を読み替える必要がある部分を示します。
 - ファイル名は、ディレクトリ `genAI_book` 以下のパスを示します。
