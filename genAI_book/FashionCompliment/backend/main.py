@@ -3,13 +3,13 @@ import json
 import os
 import vertexai
 from flask import Flask, request
-from vertexai.language_models import TextGenerationModel
+from vertexai import generative_models
 from vertexai.vision_models import Image
 from vertexai.vision_models import ImageCaptioningModel
 from vertexai.vision_models import ImageQnAModel
 
 vertexai.init(location='asia-northeast1')
-generation_model = TextGenerationModel.from_pretrained('text-bison@002')
+generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
 image_captioning_model = ImageCaptioningModel.from_pretrained('imagetext@001')
 image_qna_model = ImageQnAModel.from_pretrained('imagetext@001')
 
@@ -54,9 +54,9 @@ def get_compliment_message(image):
     if description is None or items is None:
         return '他の画像をアップロードしてください。'
 
-    response = generation_model.predict(
+    response = generation_model.generate_content(
         prompt.format(description, items),
-        temperature=0.2, max_output_tokens=1024)
+        generation_config={'temperature': 0.2, 'max_output_tokens': 1024})
     return response.text.lstrip()
 
 

@@ -11,7 +11,7 @@ from langchain.chains import AnalyzeDocumentChain
 
 storage_client = storage.Client()
 llm = VertexAI(
-    model_name='text-bison@002', location='asia-northeast1',
+    model_name='gemini-1.5-flash-001', location='asia-northeast1',
     temperature=0.1, max_output_tokens=1024)
 app = Flask(__name__)
 
@@ -77,14 +77,14 @@ def process_event():
         return ('File is not accessible.', 200)
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=4000, chunk_overlap=200)
+        chunk_size=6000, chunk_overlap=200)
     qa_chain = load_qa_chain(llm, chain_type='map_reduce')
     qa_document_chain = AnalyzeDocumentChain(
         combine_docs_chain=qa_chain, text_splitter=text_splitter)
 
     prompt = '何についての文書ですか？日本語で200字程度にまとめて教えてください。'
     description = qa_document_chain.invoke(
-        {'input_document': document, 'question': prompt})['output_text']
+        {'input_document': document, 'question': prompt})['output_text'].replace('FINAL ANSWER: ', '')
 
     print('{} - Description of {}: {}'.format(event_id, filename, description))
     with tempfile.NamedTemporaryFile() as tmp_file:

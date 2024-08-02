@@ -2,16 +2,16 @@ import json
 import os
 import vertexai
 from flask import Flask, request
-from vertexai.language_models import TextGenerationModel
+from vertexai import generative_models
 
 vertexai.init(location='asia-northeast1')
-generation_model = TextGenerationModel.from_pretrained('text-bison@002')
+generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
 app = Flask(__name__)
 
 
 def get_response(prompt, temperature=0.2):
-    response = generation_model.predict(
-         prompt, temperature=temperature, max_output_tokens=1024)
+    response = generation_model.generate_content(
+        prompt, generation_config={'temperature': temperature, 'max_output_tokens': 1024})
     return response.text.lstrip()
 
 
@@ -31,7 +31,7 @@ text: {}
     corrected = get_response(prompt)
 
     prompt = '''\
-「text:」以下の英文をより自然で洗練された英文に書き直した例を３つ示してください。
+「text:」以下の英文をより自然で洗練された英文に書き直した例を３つ示してください。書き直した文章のみを出力すること。
 
 text: I went to school yesterday. I ate an apple for lunch. I like eat apple.
 answer:
