@@ -32,7 +32,7 @@ def get_fashion_items(image):
             image=image,
             question='details of the fashion items in the picture.',
             number_of_results=3)
-        results.sort(key=len)
+        results = sorted([item.replace('unanswerable', '') for item in results], key=len)
         return results[-1]
     except:
         return None
