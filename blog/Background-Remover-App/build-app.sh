@@ -6,7 +6,7 @@ PROJECT_ID=$(gcloud config list --format 'value(core.project)')
 REPO=$LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME
 
 echo "* Checking if an application image exists."
-gcloud artifacts docker images describe $REPO/$APP_IMAGE
+gcloud artifacts docker images describe $REPO/$APP_IMAGE 2>/dev/null
 rc=$?
 if [[ $rc != 0 ]]; then
   echo "Building an application image."
