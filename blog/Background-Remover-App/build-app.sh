@@ -1,10 +1,11 @@
-#!/bin/bash -x
+#!/bin/bash
 
 . setenv.sh
 
 PROJECT_ID=$(gcloud config list --format 'value(core.project)')
 REPO=$LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME
 
+echo "* Checking if an application image exists."
 gcloud artifacts docker images describe $REPO/$APP_IMAGE
 rc=$?
 if [[ $rc != 0 ]]; then
@@ -24,6 +25,7 @@ EOF
 fi
 
 
+echo "* Checking if a service account exists."
 service_account=$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com
 gcloud iam service-accounts describe $service_account 2>/dev/null
 rc=$?
@@ -39,6 +41,7 @@ if [[ $rc != 0 ]]; then
 fi
 
 
+echo "* Checking if a frontend application is deployed."
 gcloud run services describe $SERVICE_NAME --region=$LOCATION 2>/dev/null
 rc=$?
 if [[ $rc != 0 ]]; then
@@ -48,3 +51,5 @@ if [[ $rc != 0 ]]; then
     --service-account $service_account \
     --region $LOCATION --allow-unauthenticated
 fi
+
+echo "Done."
