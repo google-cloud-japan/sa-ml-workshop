@@ -1,6 +1,6 @@
 LOCATION=asia-northeast1
 REPO_NAME=image-repo
-APP_NAME=bg-eraser
+APP_NAME=bg-remover
 
 BACKEND_IMAGE=$APP_NAME-service
 APP_IMAGE=$APP_NAME-app
