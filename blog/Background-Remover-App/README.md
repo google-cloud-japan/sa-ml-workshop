@@ -4,11 +4,11 @@
 - [Vertex AI で GitHub 公開モデルの API サービスを実現！ 〜 画像セグメンテーション編](https://zenn.dev/google_cloud_jp/articles/120d013b65c3af)
 
 ### アプリケーションの動作イメージ
-![](https://github.com/enakai00/sa-ml-workshop/blob/main/blog/images/background-remover-app.gif)
+![](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/blog/images/background-remover-app.gif)
 
 ## アーキテクチャー
 
-![](https://github.com/enakai00/sa-ml-workshop/blob/main/blog/images/background-remover-architecture.png)
+![](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/blog/images/background-remover-architecture.png)
 
 **[注意]**
 
