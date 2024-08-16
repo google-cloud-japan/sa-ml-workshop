@@ -6,8 +6,16 @@
 ### アプリケーションの動作イメージ
 ![](https://github.com/enakai00/sa-ml-workshop/blob/main/blog/images/background-remover-app.gif)
 
-画像データをバックエンドサービスに直接送信するため、画像サイズが大きいとエラーになる場合があります。
+## アーキテクチャー
 
+![](https://github.com/enakai00/sa-ml-workshop/blob/main/blog/images/background-remover-architecture.png)
+
+**[注意]**
+
+- 画像データをバックエンドサービスに直接送信しているため、画像サイズが大きいとエラーになる場合があります。
+- この問題を避けるには、処理前後の画像データは Cloud Storage に保存して、画像ファイルの URI を API のリクエスト／レスポンスに含める方法が考えられます。Firebase を利用すると、クライアントから Cloud Storage のバケットにアクセスするほか、認証機能などを簡単追加する事ができます。
+- Firebase を用いた生成 AI アプリケーションの開発は次の書籍が参考になります。
+  - [Google Cloudで学ぶ生成AIアプリ開発入門](https://gihyo.jp/book/2024/978-4-297-14171-4)
 
 ## デプロイ手順
 
