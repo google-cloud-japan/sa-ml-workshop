@@ -59,7 +59,7 @@ export default function RmbgUI() {
   }
 
   const getTimestamp = () => {
-    const d = new Date(); // Today
+    const d = new Date();
     const DateTimeFormat = 'YYYYMMDD_hhmiss';
     let ts = DateTimeFormat
       .replace(/YYYY/g, String(d.getFullYear()))
