@@ -13,8 +13,7 @@
 **[注意]**
 
 - 画像データをバックエンドサービスに直接送信しているため、画像サイズが大きいとエラーになる場合があります。
-- この問題を避けるには、処理前後の画像データは Cloud Storage に保存して、画像ファイルの URI を API のリクエスト／レスポンスに含める方法が考えられます。Firebase を利用すると、クライアントから Cloud Storage のバケットにアクセスするほか、認証機能などを簡単追加する事ができます。
-- Firebase を用いた生成 AI アプリケーションの開発は次の書籍が参考になります。
+- この問題を避けるには、処理前後の画像データは Cloud Storage に保存して、画像ファイルの URI を API のリクエスト／レスポンスに含める方法が考えられます。Firebase を利用すると、クライアントから Cloud Storage のバケットにアクセスするほか、認証機能などを簡単追加する事ができます。Firebase を用いた生成 AI アプリケーションの開発は次の書籍が参考になります。
   - [Google Cloudで学ぶ生成AIアプリ開発入門](https://gihyo.jp/book/2024/978-4-297-14171-4)
 
 ## デプロイ手順
@@ -35,7 +34,14 @@ git clone https://github.com/google-cloud-japan/sa-ml-workshop.git
 cd $HOME/sa-ml-workshop/blog/Background-Remover-App/
 ./build-backend.sh
 ```
-バックエンドのデプロイには 60 分程度かかります。
+**[注意]**
+- バックエンドのデプロイには全体で 60 分程度かかります。
+- 特に最後のモデルのデプロイ処理に 30 分以上かかると下記のエラーメッセージが表示されます。そのような場合は、クラウドコンソールの「Vertex AI」→「オンライン予測」の画面でエンドポイント名 `bg-remover-ep` をクリックするとエンドポイントの状態が確認できます。「ステータス」が「デプロイ中」の場合は、そのままデプロイが完了するのを待ってから、次の作業に進んでください。
+```
+ERROR: (gcloud.ai.endpoints.deploy-model) Operation https://asia-northeast1-aiplatform.googleapis.com/v1beta1/projects...
+has not finished in 1800 seconds. The operations may still be underway remotely and may still succeed;
+use gcloud list and describe commands or https://console.developers.google.com/ to check resource state.
+```
 
 ### フロントエンドアプリケーションをデプロイ
 ```
