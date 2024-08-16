@@ -1,6 +1,6 @@
 uvicorn[standard]==0.20.0
 gunicorn==22.0.0
-fastapi[all]==0.88.0
+fastapi[all]==0.109.1
 numpy==1.24.4
 pillow==10.4.0
 git+https://github.com/facebookresearch/segment-anything-2.git
