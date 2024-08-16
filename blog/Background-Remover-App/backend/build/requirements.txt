@@ -1,0 +1,9 @@
+uvicorn[standard]==0.20.0
+gunicorn==22.0.0
+fastapi[all]==0.88.0
+numpy==1.24.4
+pillow==10.4.0
+git+https://github.com/facebookresearch/segment-anything-2.git
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torch==2.3.1+cu121
+torchvision==0.18.1+cu121
