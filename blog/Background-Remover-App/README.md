@@ -21,6 +21,8 @@
 
 新規プロジェクトを作成して、Cloud Shell から以下のコマンドを実行します。
 
+Cloud Shell のホームディレクトリ `/home` に 3G 程度の空き容量があることを事前に確認してください。
+
 ### リポジトリのクローン
 ```
 cd $HOME
@@ -38,3 +40,9 @@ cd $HOME/sa-ml-workshop/blog/Background-Remover-App/
 cd $HOME/sa-ml-workshop/blog/Background-Remover-App/
 ./build-app.sh
 ```
+
+## クリーンアップ
+
+不要な課金を避けるためにテストが終わったら、使用したプロジェクトをシャットダウンしてください。
+
+
