@@ -36,7 +36,7 @@ cd $HOME/sa-ml-workshop/blog/Background-Remover-App/
 ```
 **[注意]**
 - バックエンドのデプロイには全体で 60 分程度かかります。
-- 特に最後のモデルのデプロイ処理に 30 分以上かかると下記のエラーメッセージが表示されます。そのような場合は、クラウドコンソールの「Vertex AI」→「オンライン予測」の画面でエンドポイント名 `bg-remover-ep` をクリックするとエンドポイントの状態が確認できます。「ステータス」が「デプロイ中」の場合は、そのままデプロイが完了するのを待ってから、次の作業に進んでください。
+- 特に最後のモデルのデプロイ処理に 30 分以上かかると下記のエラーメッセージが表示されます。そのような場合は、クラウドコンソールの「Vertex AI」→「オンライン予測」の画面でエンドポイント名 `bg-remover-ep` をクリックするとエンドポイントのステータスが確認できます。ステータスが「デプロイ中」の場合は、そのままデプロイが完了して「準備完了」になるのを待ってから、次の作業に進んでください。
 ```
 ERROR: (gcloud.ai.endpoints.deploy-model) Operation https://asia-northeast1-aiplatform.googleapis.com/v1beta1/projects...
 has not finished in 1800 seconds. The operations may still be underway remotely and may still succeed;
