@@ -18,10 +18,10 @@ export default function RmbgPage() {
   return (
     <>
       <Head>
-        <title>Background Eraser Application</title>
+        <title>Background Remover Application</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h2>Background Eraser Application</h2>
+      <h2>Background Remover Application</h2>
       {element}
     </>
   );
