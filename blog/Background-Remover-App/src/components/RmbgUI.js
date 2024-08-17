@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from "react";
-import path from "path";
+import { useRef, useState, useEffect } from 'react';
+import path from 'path';
 
 export default function RmbgUI() {
 
@@ -7,13 +7,13 @@ export default function RmbgUI() {
   class FileReaderEx extends FileReader {
     #readAs(blob, ctx) {
       return new Promise((resolve, reject) => {
-        super.addEventListener("load", ({target}) => resolve(target.result));
-        super.addEventListener("error", ({target}) => reject(target.error));
+        super.addEventListener('load', ({target}) => resolve(target.result));
+        super.addEventListener('error', ({target}) => reject(target.error));
         super[ctx](blob);
       });
     }
     readAsDataURL(blob) {
-      return this.#readAs(blob, "readAsDataURL");
+      return this.#readAs(blob, 'readAsDataURL');
     }
   }
 
@@ -28,17 +28,17 @@ export default function RmbgUI() {
   }
 
   const resizeImage = async (imageBlob, width) => {
-    const context = document.createElement('canvas').getContext('2d');
+    const ctx = document.createElement('canvas').getContext('2d');
     const image = await new ImageEx().create(imageBlob);
     const heightCurrent = image.naturalHeight;
     const widthCurrent = image.naturalWidth;
     const height = Math.floor(heightCurrent * (width / widthCurrent));
-    context.canvas.width = width;
-    context.canvas.height = height;
-    context.drawImage(
+    ctx.canvas.width = width;
+    ctx.canvas.height = height;
+    ctx.drawImage(
       image, 0, 0, widthCurrent, heightCurrent, 0, 0, width, height);
     return new Promise((resolve) => {
-      context.canvas.toBlob(resolve, 'image/png');
+      ctx.canvas.toBlob(resolve, 'image/png');
     });
   }
 
@@ -51,9 +51,8 @@ export default function RmbgUI() {
   const base64toBlob = (base64) => {
     const bin = atob(base64.replace(/^.*,/, ''));
     const buffer = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) {
-        buffer[i] = bin.charCodeAt(i);
-    }
+    for (let i = 0; i < bin.length; i++)
+      buffer[i] = bin.charCodeAt(i);
     const blob = new Blob([buffer.buffer], {type: 'image/png'});
     return blob;
   }
@@ -116,7 +115,7 @@ export default function RmbgUI() {
     if (mode === newMode) return;
     setMode(newMode);
     const canvas = document.getElementById('canvas');
-    const newCanvas = canvas.cloneNode(true);
+    const newCanvas = canvas.cloneNode(true); // Drop old event listners
     canvas.replaceWith(newCanvas);
     let label = null;
     if (newMode === 'fg') label = 1;
@@ -124,7 +123,7 @@ export default function RmbgUI() {
     if (label !== null) {  // fg or bg
       newCanvas.addEventListener('click', (e) => {
         setDataset((currentDataset) => {
-          const newDataset = { ...currentDataset };
+          const newDataset = {...currentDataset};
           newDataset.points.push([e.offsetX, e.offsetY]);
           newDataset.labels.push(label);
           return newDataset;
@@ -135,7 +134,7 @@ export default function RmbgUI() {
       const bmp = imageInfo.bmp;
       const [width, height] = [bmp.width, bmp.height];
       newCanvas.addEventListener('mousedown', (e) => {
-        isDrawing = true;	       
+        isDrawing = true;
         [startX, startY] = [e.offsetX, e.offsetY];
         if (startX < 0) startX = 0;
         if (startY < 0) startY = 0;
@@ -151,11 +150,11 @@ export default function RmbgUI() {
         if (currentX > width) currentX = width;
         if (currentY > height) currentY = height;
         const [x1, y1] = [Math.min(startX, currentX),
-		          Math.min(startY, currentY)]
+                          Math.min(startY, currentY)]
         const [x2, y2] = [Math.max(startX, currentX),
-		          Math.max(startY, currentY)]
+                          Math.max(startY, currentY)]
         setDataset((currentDataset) => {
-          const newDataset = { ...currentDataset };
+          const newDataset = {...currentDataset};
           newDataset.box = [x1, y1, x2, y2]
           return newDataset;
         });
@@ -172,7 +171,7 @@ export default function RmbgUI() {
     setDataset(initDataset);
     setProcessing(false);
     setImageInfo({'blob': blob, 'preblob': null, 'bmp': bmp,
-	          'key': getTimestamp()});
+                  'key': getTimestamp()});
   };
 
   const undoImage = async () => {
@@ -240,13 +239,13 @@ export default function RmbgUI() {
                 style={{border: '20px solid gray'}}></canvas>
         <div>
           <input id='button' type='button' value='Clear'
-	         onClick={() => {setDataset(initDataset); registHandlers('box');}}/>
+                 onClick={() => {setDataset(initDataset); registHandlers('box');}}/>
           <input id={inputId.box} type='button' value='Box'
-	         onClick={() => registHandlers('box')}/>
+                 onClick={() => registHandlers('box')}/>
           <input id={inputId.fg} type='button' value='Object'
-	         onClick={() => registHandlers('fg')}/>
+                 onClick={() => registHandlers('fg')}/>
           <input id={inputId.bg} type='button' value='Background'
-	         onClick={() => registHandlers('bg')}/>
+                 onClick={() => registHandlers('bg')}/>
         </div>
       </>
     );
