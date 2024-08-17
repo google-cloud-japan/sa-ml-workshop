@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.5.1-cudnn-devel-ubuntu22.04
+FROM nvidia/cuda:12.6.0-cudnn-runtime-ubuntu22.04
 RUN apt-get update && \
     apt-get install --no-install-recommends -y curl pip git && \
     python3 -m pip --no-cache-dir install --upgrade pip
