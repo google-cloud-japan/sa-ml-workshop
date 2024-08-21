@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import path from 'path';
 
-export default function RmbgUI() {
+export default function BgRemoverUI() {
 
   // Helper functions to manipulate blob/bmp images
   class FileReaderEx extends FileReader {
