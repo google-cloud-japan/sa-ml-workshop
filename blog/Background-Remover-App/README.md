@@ -15,7 +15,8 @@
 
 **[注意]**
 
-- 画像データをバックエンドサービスに直接送信しているため、画像サイズが大きいとエラーになる場合があります。（JavaScript Console に `413 (Payload Too Large)` などが出力されます。）
+- Vertex AI オンライン予測サービスのエンドポイントは、リクエストサイズに 1.5MB の上限があります。そのため、処理対象の画像はファイルサイズの小さな JPEG に変換してバックエンドに送信しており、画像の品質が劣化する場合あります。（処理後の画像は透過レイヤーを持った PNG で戻ります。）
+  - （参考）[カスタム トレーニング モデルからオンライン予測を取得する](https://cloud.google.com/vertex-ai/docs/predictions/get-online-predictions?hl=ja): エンドポイントにリクエストを送信する
 - この問題を避けるには、処理前後の画像データは Cloud Storage に保存して、画像ファイルの URI を API のリクエスト／レスポンスに含める方法が考えられます。[Firebase](https://firebase.google.com/?hl=ja) を利用すると、クライアントから Cloud Storage のバケットにアクセスするほか、認証機能などを簡単に追加する事ができます。Firebase を用いた生成 AI アプリケーションの開発は次の書籍が参考になります。
   - [Google Cloudで学ぶ生成AIアプリ開発入門](https://gihyo.jp/book/2024/978-4-297-14171-4)
 
