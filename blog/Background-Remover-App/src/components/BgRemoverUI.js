@@ -27,26 +27,33 @@ export default function RmbgUI() {
     }
   }
 
-  const resizeImage = async (imageBlob, width) => {
-    const ctx = document.createElement('canvas').getContext('2d');
-    const image = await new ImageEx().create(imageBlob);
-    const heightCurrent = image.naturalHeight;
-    const widthCurrent = image.naturalWidth;
-    const height = Math.floor(heightCurrent * (width / widthCurrent));
-    ctx.canvas.width = width;
-    ctx.canvas.height = height;
-    ctx.drawImage(
-      image, 0, 0, widthCurrent, heightCurrent, 0, 0, width, height);
-    return new Promise((resolve) => {
-      ctx.canvas.toBlob(resolve, 'image/png');
-    });
-  }
+  const resizeImage = async (imageBlob, width, quality=null) => {
+    const _resizeImage = async (imageBlob, width, quality) => {
+      let type = 'image/jpeg';
+      if (quality === null) [type, quality] = ['image/png', 1];
+      const ctx = document.createElement('canvas').getContext('2d');
+      const image = await new ImageEx().create(imageBlob);
+      if (width === null) width = image.naturalWidth; 
+      const [widthOrig, heightOrig] = [image.naturalWidth, image.naturalHeight];
+      const height = Math.floor(heightOrig * (width / widthOrig));
+      [ctx.canvas.width, ctx.canvas.height] = [width, height];
+      ctx.drawImage(
+        image, 0, 0, widthOrig, heightOrig, 0, 0, width, height);
+      return new Promise((resolve) => {
+        ctx.canvas.toBlob(resolve, type, quality);
+      });
+    };
+
+    const blob = await _resizeImage(imageBlob, width, quality);
+    blob.name = imageBlob.name;
+    return blob;
+  };
 
   const blobToBase64 = async (imageBlob) => {
     const imageDataURL = await new FileReaderEx().readAsDataURL(imageBlob);
     const imageBase64 = imageDataURL.replace('data:', '').replace(/^.+,/, '');
     return imageBase64;
-  }
+  };
 
   const base64toBlob = (base64) => {
     const bin = atob(base64.replace(/^.*,/, ''));
@@ -55,7 +62,7 @@ export default function RmbgUI() {
       buffer[i] = bin.charCodeAt(i);
     const blob = new Blob([buffer.buffer], {type: 'image/png'});
     return blob;
-  }
+  };
 
   const getTimestamp = () => {
     const d = new Date();
@@ -103,7 +110,7 @@ export default function RmbgUI() {
       ctx.fill();
     }
     const [x1, y1, x2, y2] = dataset.box;
-    if(x1 !== 0 | y1 !== 0 | x2 !== 0 | y2 !== 0) {
+    if (x1 !== 0 | y1 !== 0 | x2 !== 0 | y2 !== 0) {
       [ctx.strokeStyle, ctx.lineWidth] = ['Red', 3];
       ctx.strokeRect(x1, y1, x2-x1, y2-y1);
     }
@@ -165,12 +172,13 @@ export default function RmbgUI() {
 
   const onFileInputChange = async (evt) => {
     const blob = evt.target.files[0];
+    const blobPng = await resizeImage(blob, null); // Convert to png
     const blobResized = await resizeImage(blob, 600);
     const bmp = await createImageBitmap(blobResized);
     setMode(null);
     setDataset(initDataset);
     setProcessing(false);
-    setImageInfo({'blob': blob, 'preblob': null, 'bmp': bmp,
+    setImageInfo({'blob': blobPng, 'preblob': null, 'bmp': bmp,
                   'key': getTimestamp()});
   };
 
@@ -184,18 +192,18 @@ export default function RmbgUI() {
 
   const processImage = async () => {
     const callBackend = async (id, imageBase64, dataset) => {
-      const apiEndpoint = "/api/rmbg";
+      const apiEndpoint = '/api/bgRemover';
       const request = {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           id: id,
           image: imageBase64,
           box: dataset.box,
           points: dataset.points,
-          labels: dataset.labels,
+          labels: dataset.labels
         })
       };
       const res = await fetch(apiEndpoint, request);
@@ -208,15 +216,22 @@ export default function RmbgUI() {
     const image = await new ImageEx().create(preblob);
     const ratio = image.naturalWidth / imageInfo.bmp.width;
     const datasetRescaled = structuredClone(dataset);
-    for (let i = 0; i < 4; i++ )
+    for (let i = 0; i < 4; i++)
       datasetRescaled.box[i] = Math.floor(dataset.box[i] * ratio);
     for (let i = 0; i < dataset.points.length; i++) {
       const [x, y] = dataset.points[i];
       datasetRescaled.points[i] = [Math.floor(x * ratio), Math.floor(y * ratio)];
     }
-
-    const imageBase64 = await blobToBase64(preblob);
-    const newImageBase64 = await callBackend(preblob.name, imageBase64, datasetRescaled);
+    // Use jpeg to avoid the 1.5M size limit
+    // https://cloud.google.com/vertex-ai/docs/predictions/get-online-predictions
+    let blobJpeg;
+    for (let quality = 1.0; quality > 0; quality -= 0.1) {
+      blobJpeg = await resizeImage(preblob, null, quality);
+      if (blobJpeg.size < 1.0 * 1024 * 1024) break
+    }      
+    const imageBase64 = await blobToBase64(blobJpeg);
+    const newImageBase64 = await callBackend(preblob.name, imageBase64,
+                                             datasetRescaled);
     const blob = base64toBlob(newImageBase64);
     blob.name = preblob.name;
     const blobResized = await resizeImage(blob, 600); 
@@ -239,7 +254,10 @@ export default function RmbgUI() {
                 style={{border: '20px solid gray'}}></canvas>
         <div>
           <input id='button' type='button' value='Clear'
-                 onClick={() => {setDataset(initDataset); registHandlers('box');}}/>
+                 onClick={() => {
+                   setDataset(initDataset);
+                   registHandlers('box');
+                 }}/>
           <input id={inputId.box} type='button' value='Box'
                  onClick={() => registHandlers('box')}/>
           <input id={inputId.fg} type='button' value='Object'
@@ -256,8 +274,8 @@ export default function RmbgUI() {
       <button onClick={() => inputRef.current.click()}>
         Upload
       </button>
-      <input ref={inputRef} hidden
-             type='file' accept='image/*' onChange={onFileInputChange} />
+      <input ref={inputRef} hidden type='file' accept='image/*'
+             onChange={onFileInputChange}/>
     </>
   );
 

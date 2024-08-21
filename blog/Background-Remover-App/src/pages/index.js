@@ -1,16 +1,16 @@
-import Head from "next/head";
-import { useState, useEffect } from "react";
-import RmbgUI from "components/RmbgUI";
+import Head from 'next/head';
+import { useState, useEffect } from 'react';
+import BgRemoverUI from 'components/BgRemoverUI';
 
-export default function RmbgPage() {
-  // Trick to avoid serverside rendering issue.
+export default function BgRemoverPage() {
+  // Trick to avoid serverside rendering issue
   const [init, setInit] = useState(null);
   useEffect(() => {setInit(true);}, []);
 
   let element;
   if (init) {
     element = (
-      <><RmbgUI /></>
+      <><BgRemoverUI /></>
     );
   } else {
     element = (<></>);

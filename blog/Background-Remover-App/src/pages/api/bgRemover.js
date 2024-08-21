@@ -8,6 +8,15 @@ const clientOptions = {
 
 const predictionServiceClient = new sdk.v1.PredictionServiceClient(clientOptions);
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '1.5mb'
+    }
+  }
+};
+
+
 export default async function handler(req, res) {
   const [id, image] = [req.body.id, req.body.image];
   const [box, points, labels] = [req.body.box, req.body.points, req.body.labels];
