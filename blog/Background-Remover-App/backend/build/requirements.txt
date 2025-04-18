@@ -5,5 +5,5 @@ numpy==1.24.4
 pillow==10.4.0
 git+https://github.com/facebookresearch/segment-anything-2.git
 --find-links https://download.pytorch.org/whl/torch_stable.html
-torch==2.3.1+cu121
+torch==2.6.0
 torchvision==0.18.1+cu121
