@@ -251,8 +251,8 @@ if __name__ == '__main__':
     port = parsed_url.port
 
     run_server(
-      agent_instance=search_agent,
-      app_name=APP_NAME,
-      host=host,
-      port=port,
+        agent_instance=search_agent,
+        app_name=APP_NAME,
+        host=host,
+        port=port,
     )
