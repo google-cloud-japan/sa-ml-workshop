@@ -72,7 +72,8 @@ class AdkAgent:
             memory_service=InMemoryMemoryService(),
         )
 
-    # To map context_id with a unique session_id, we use context_id as user_id of the session 
+    # To map context_id to a unique session_id, we use context_id as user_id (instead of session_id itself) of the session.
+    # It's because some session services (ex. VertexAiSessionService) don't accept an arbitrary session ID string.
     async def _upsert_session(self, user_id: str):
         sessions = self._runner.session_service.list_sessions(
             app_name=self._app_name,
