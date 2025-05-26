@@ -242,7 +242,7 @@ def run_server(
         raise
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     # Import your custom agent(s)
     from adk_agents import search_agent
 
