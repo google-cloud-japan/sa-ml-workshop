@@ -2,7 +2,7 @@
 
 ## 基礎知識
 
-こちらのスライドを参照：[ADK と A2A を組み合わせる方法](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/blog/adk_a2a_integration/images/ADK_A2A_integration.pdf)
+こちらのスライドを参照：[A2A と ADK を組み合わせる方法](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/blog/adk_a2a_integration/images/ADK_A2A_integration.pdf)
 
 ## アーキテクチャー
 
