@@ -1,5 +1,9 @@
 # A2A サーバーで動作する ADK のエージェントをリモートの ADK から利用する構成例
 
+## 基礎知識
+
+- [ADK_A2A_integration.pdf](https://github.com/user-attachments/files/20597952/ADK_A2A_integration.pdf)
+
 ## アーキテクチャー
 
 ![](images/architecture.png)
