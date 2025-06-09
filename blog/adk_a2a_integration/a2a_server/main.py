@@ -48,7 +48,6 @@ class AdkAgent:
         for event in events:
             if text_parts: # not a last part
                 updater.new_agent_message(text_parts)
-                updater.complete()    
             text_parts = []
             if 'content' in event and 'parts' in event['content']:
                 for part in event['content']['parts']:
