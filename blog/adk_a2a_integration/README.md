@@ -6,7 +6,7 @@
 
 ### クライアント側
 
-- LlmAgent オブジェクトに設定した `before_model_callback` オプションにより、LlmAgent が受け取った `LlmRequest` をコールバック関数 `a2a_remote_call` で処理します。（LLM モデルは使用しません。）
+- LlmAgent オブジェクトに設定した `before_model_callback` オプションにより、LlmAgent が受け取った `LlmRequest` をコールバック関数 `a2a_remote_call()` で処理します。（LLM モデルは使用しません。）
 - `LlmRequest` に含まれる（最新の）ユーザーメッセージを A2A クライアントを使って A2A サーバーに送信して、受信したテキストメッセージを `LlmResponse` に含めて返します。
 - Session ID を A2A の Context ID として送信することで、A2A サーバーに現在のセッションを特定する情報として利用させます。
 
