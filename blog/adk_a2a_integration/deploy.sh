@@ -6,7 +6,7 @@ PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectN
 REPO_NAME=cloud-run-source-deploy
 REPO=${REGION}-docker.pkg.dev/$PROJECT_ID/$REPO_NAME
 
-DEPLOY_BACKEND=false # true
+DEPLOY_BACKEND=true
 
 
 echo ""
