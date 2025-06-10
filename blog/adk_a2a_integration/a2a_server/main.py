@@ -37,7 +37,7 @@ class AdkAgent:
         sessions_list = self._remote_agent.list_sessions(user_id=user_id)
         return session
 
-    async def stream(self, updater, context_id, query):
+    def stream(self, updater, context_id, query):
         session = self._upsert_session(context_id)
         events = self._remote_agent.stream_query(
             user_id='default_user',
@@ -55,7 +55,6 @@ class AdkAgent:
                         text_parts.append(TextPart(text=part['text']))
         # treat last part as an artifact
         updater.add_artifact(text_parts)
-        updater.complete()
 
 
 class AdkAgentExecutor(AgentExecutor):
@@ -73,7 +72,8 @@ class AdkAgentExecutor(AgentExecutor):
 
         context_id = context.context_id
         query = context.get_user_input()
-        await self.adk_agent.stream(updater, context_id, query)
+        self.adk_agent.stream(updater, context_id, query)
+        updater.complete()
 
 
 def create_agent_card(
