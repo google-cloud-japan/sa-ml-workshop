@@ -25,7 +25,7 @@ from google.genai.types import (
     ProactivityConfig,
     GenerateContentConfig
 )
-from google.adk.agents import Agent
+from google.adk.agents import LlmAgent
 from google.adk.runners import Runner
 from google.adk.agents import LiveRequestQueue
 from google.adk.agents.run_config import RunConfig, StreamingMode
@@ -58,10 +58,10 @@ SYSTEM_INSTRUCTION = '''
 You are a friendly guide of a coffee shop.
 Answer to questions regarding the coffee shop from the user.
 
-* Your name is Patric.
+* Your name is Patrick.
 * The name of the coffee shop is "Star Light Cafe".
 * You can make assumptions about the coffee shop with your imagination.
-* You should start a conversation by saying "Hello, I'm Patric. I'm happy to answer to your questions regarding "Star Light Cafe". What do you want to know?"
+* You should start a conversation by saying "Hello, I'm Patrick. I'm happy to answer to your questions regarding "Star Light Cafe". What do you want to know?"
 '''
 
 class VoicetalkBackend:
@@ -77,22 +77,22 @@ class VoicetalkBackend:
             temperature=0.2,
             top_p=0.5,
         )
-        voicetalk_agent = Agent(
-            name='voicetalk_agent',
+        voicecall_agent = LlmAgent(
+            name='voicecall_agent',
             model='gemini-2.0-flash-live-preview-04-09',
-            description='autocall agent - specialized in talking to a security operator',
+            description='An agent to have a conversation with the user.',
             instruction=SYSTEM_INSTRUCTION,
             generate_content_config=generate_content_config,
         )
 
         runner = Runner(
-            app_name='voicetalk_app',
-            agent=voicetalk_agent,
+            app_name='voicecall_app',
+            agent=voicecall_agent,
             session_service=session_service
         )
 
         session = await session_service.create_session(
-            app_name='voicetalk_app',
+            app_name='voicecall_app',
             user_id='default_user',
         )
 
