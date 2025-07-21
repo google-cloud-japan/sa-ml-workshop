@@ -173,7 +173,7 @@ def get_tools(phone_id):
     async def send_final_report_tool(summaryText: str) -> str:
         """
         Tool to send a final report including the conversation summary to the user.
-        Use this tool only when you finished the conversation with the seurity operator.
+        Use this tool only when you finished the conversation with the security operator.
 
         Returns "succeeded" if the report is sent successfully.
         """
