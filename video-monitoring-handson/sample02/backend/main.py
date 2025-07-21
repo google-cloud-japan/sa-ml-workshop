@@ -41,17 +41,14 @@ load_dotenv()
 
 _, PROJECT_ID = google.auth.default()
 LOCATION = 'us-central1'
+VOICE_NAME = os.environ.get('VOICE_NAME', 'Puck')
 LANGUAGE = os.environ.get('LANGUAGE', 'English')
 LANG_CODE_MAP = {
     'English': 'en-US',
     'Japanese': 'ja-JP',
     'Korean': 'ko-KR',
 }
-logger.info(f'LANGUAGE: {LANGUAGE}')
-
-
-VOICE_NAME = 'Puck'
-SEND_SAMPLE_RATE = 16000
+logger.info(f'LANGUAGE: {LANGUAGE}, VOICE_NAME: {VOICE_NAME}')
 
 os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True'
 os.environ['GOOGLE_CLOUD_PROJECT'] = PROJECT_ID
@@ -166,7 +163,7 @@ class VoicetalkBackend:
                 decoded_data = base64.b64decode(message['data'])
                 self.live_request_queue.send_realtime(
                     Blob(data=decoded_data,
-                         mime_type=f'audio/pcm;rate={SEND_SAMPLE_RATE}')
+                         mime_type=f'audio/pcm;rate=16000')
                 )
 
 
