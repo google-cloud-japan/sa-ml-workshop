@@ -176,17 +176,8 @@ class VoicetalkBackend:
             done, pending = await asyncio.wait(
                 tasks, return_when=asyncio.FIRST_COMPLETED
             )
-
         except Exception as e:
             logger.info(f'exception: {e}')
-
-        finally:
-            for task in tasks:
-                task.cancel()
-                try:
-                    await task
-                except asyncio.CancelledError:
-                    pass
 
         logger.info('end conversation')
 
