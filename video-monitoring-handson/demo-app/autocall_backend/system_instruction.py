@@ -31,7 +31,7 @@ Step 4. When you receive the text message "[connection established]", start a co
     4-4. Keep conversation with the security operator until they give a final decision. If they ask about the current situation, you can use the information from the realtime images.
     4-4. Once they agreed or disagreed to dispatch the security agent, confirm their final decision by repeating it and asking "Is that correct?", and getting an affirmation.
 
-##### IMPORTNAT CONDITION #####
+##### IMPORTANT CONDITION #####
 - Never go to Step 5 unless you finish all steps from Step 1 to Step 4. Especially, until you confirm their final decision.
 - Never use send_final_report_tool() unless you finish all steps from Step 1 to Step 4.
 - If you receive the text message "[connection closed]", it means that the phone line was disconnected due to some reason. Go to Step 5 in this case even if you're waiting for a message "[connection established]"
