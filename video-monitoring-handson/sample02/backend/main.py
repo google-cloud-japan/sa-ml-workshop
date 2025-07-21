@@ -122,8 +122,7 @@ class VoicetalkBackend:
         return live_events, live_request_queue
 
 
-    async def _agent_to_client_messaging(self):
-        # live_events is a blocking operation.
+    async def agent_to_client_messaging(self):
         async for event in self.live_events:
             if not (event.content and event.content.parts):
                 continue
@@ -138,19 +137,6 @@ class VoicetalkBackend:
                         'data': base64.b64encode(audio_data).decode('ascii')
                     }
                     await self.client_ws.send_text(json.dumps(message))
-
-
-    async def agent_to_client_messaging(self):
-        def sync_wrapper():
-            return asyncio.run(
-                self._agent_to_client_messaging()
-            )
-
-        # run in the process pool so that task can be cancelled.
-        loop = asyncio.get_running_loop()
-        await loop.run_in_executor(
-            None, sync_wrapper
-        )
 
 
     async def client_to_agent_messaging(self):
@@ -197,6 +183,10 @@ class VoicetalkBackend:
         finally:
             for task in tasks:
                 task.cancel()
+                try:
+                    await task
+                except asyncio.CancelledError:
+                    pass
 
         logger.info('end conversation')
 
