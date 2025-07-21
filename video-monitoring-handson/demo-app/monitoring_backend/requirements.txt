@@ -4,4 +4,3 @@ gunicorn==23.0.0
 google-auth==2.40.3
 google-genai==1.25.0
 uvicorn==0.35.0
-firebase-admin==7.0.0

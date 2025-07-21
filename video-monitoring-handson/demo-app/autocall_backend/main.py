@@ -7,8 +7,6 @@ import threading
 import time
 import uuid
 
-import firebase_admin
-from firebase_admin import auth
 import google.auth
 
 from google.genai.types import (
@@ -43,13 +41,11 @@ _, PROJECT_ID = google.auth.default()
 LOCATION = 'us-central1'
 
 VOICE_NAME = os.getenv('VOICE_NAME', 'Puck')
-SEND_SAMPLE_RATE = int(os.getenv('SEND_SAMPLE_RATE', '16000'))
 
 os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True'
 os.environ['GOOGLE_CLOUD_PROJECT'] = PROJECT_ID
 os.environ['GOOGLE_CLOUD_LOCATION'] = LOCATION
 
-SESSION_SERVICE = InMemorySessionService()
 
 ## Logging setup
 logger = logging.getLogger()
@@ -240,7 +236,7 @@ async def client_to_agent_messaging(
                 decoded_data = base64.b64decode(message['data'])
                 live_request_queue.send_realtime(
                     Blob(data=decoded_data,
-                         mime_type=f'audio/pcm;rate={SEND_SAMPLE_RATE}')
+                         mime_type=f'audio/pcm;rate=16000')
                 )
                 continue
 
@@ -316,6 +312,7 @@ async def frontend_to_agent_messaging(
 async def create_runner(phone_id, lang):
     logger.info('create runner.')
     try:
+        session_service = InMemorySessionService()
         tools = get_tools(phone_id)
         generate_content_config = GenerateContentConfig(
             temperature=0.2,
@@ -333,10 +330,10 @@ async def create_runner(phone_id, lang):
         runner = Runner(
             app_name='autocall_app',
             agent=autocall_agent,
-            session_service=SESSION_SERVICE,
+            session_service=session_service,
         )
 
-        session = await SESSION_SERVICE.create_session(
+        session = await session_service.create_session(
             app_name='autocall_app',
             user_id='default_user',
         )
@@ -403,19 +400,19 @@ async def conversation_handler(phone_id):
         agent_to_client_task = asyncio.create_task(
             agent_to_client_messaging(
                 phone_id, voice_client_ws, live_events
-            ), name='AgentToClient'
+            )
         )
         # voice client to agent
         client_to_agent_task = asyncio.create_task(
             client_to_agent_messaging(
                 phone_id, voice_client_ws, live_request_queue
-            ), name='ClientToAgent'
+            )
         )
         # frontend to agent
         frontend_to_agent_task = asyncio.create_task(
             frontend_to_agent_messaging(
                 phone_id, frontend_ws, live_request_queue, request_text
-            ), name='FrontendToAgent'
+            )
         )
         # agent to frontend is handled by agent tools 
 
@@ -436,27 +433,8 @@ async def conversation_handler(phone_id):
             tasks, return_when=asyncio.FIRST_COMPLETED
         )
 
-        session_id = CLIENTS[phone_id]['session_id']
-        logger.info(f'clean up session: {session_id}')
         CLIENTS[phone_id]['close_timer'].cancel()
-        await cancel_tasks(phone_id)
-
         CLIENTS[phone_id]['session_id'] = None
-        try:
-            await SESSION_SERVICE.delete_session(
-                app_name='autocall_app',
-                user_id='default_user',
-                session_id=session_id,
-            )
-        except Exception as e:
-            logger.error(f'Delete session error: {e}')
-
-        if live_request_queue:
-            try:
-                live_request_queue.close()
-            except Exception as e:
-                logger.error(f'LiveRequestQueue close error: {e}')
-
         logger.info('end audio conversation tasks')
 
     except Exception as e:
@@ -475,45 +453,10 @@ async def read_root():
     return {'status': 'ok'}
 
 
-def verify_id_token(id_token):
-    try:
-        firebase_admin.initialize_app()
-    except ValueError as err:
-        if 'already exists' not in str(err):
-            logger.error(f'Firebase initialization error: {err}')
-
-    try:
-        decoded_token = auth.verify_id_token(id_token)
-        logger.info(decoded_token)
-        return decoded_token
-    except Exception as err:
-        return None
-
-
-async def auth_id_token(websocket):
-    close_timer = set_timer(5, websocket.close)
-    try:
-        async for _message in websocket.iter_text():
-            message = json.loads(_message)
-            if message['type'] != 'token':
-                continue
-            if verify_id_token(message['data']):
-                close_timer.cancel()
-                return True
-        return False
-    except Exception as e:
-        logger.error(f'error on token verification: {e}');
-        return False
-
-
 @app.websocket('/voice_client/{phone_id}')
 async def voice_client_handler(websocket: WebSocket, phone_id: str):
     try:
         await websocket.accept()
-        if not await auth_id_token(websocket):
-            logger.info('authentication failed.')
-            return
-
         logger.info(f'voice cliant with phone id {phone_id} connected.')
 
         if phone_id in CLIENTS.keys():
@@ -537,6 +480,7 @@ async def voice_client_handler(websocket: WebSocket, phone_id: str):
             await asyncio.sleep(1)
 
         logger.info(f'voice cliant with phone id {phone_id} disconnected.')
+        del CLIENTS[phone_id]['voice_client']
         return
 
     finally:
@@ -549,9 +493,6 @@ async def voice_client_handler(websocket: WebSocket, phone_id: str):
 async def frontend_handler(websocket: WebSocket, phone_id: str):
     try:
         await websocket.accept()
-        if not await auth_id_token(websocket):
-            logger.info('authentication failed.')
-            return
 
         if phone_id not in CLIENTS:
             logger.info(f'no voice client with phone id {phone_id}')
@@ -568,16 +509,13 @@ async def frontend_handler(websocket: WebSocket, phone_id: str):
         await conversation_handler(phone_id)
 
         logger.info(f'frontend with phone id {phone_id} disconnected.')
-        if (phone_id in CLIENTS.keys() and
-            'frontend' in CLIENTS[phone_id].keys()):
-            del CLIENTS[phone_id]['frontend']
+        del CLIENTS[phone_id]['frontend']
         return
 
     finally:
         if (websocket.application_state != WebSocketState.DISCONNECTED and
             websocket.client_state != WebSocketState.DISCONNECTED):
             await websocket.close()
-
 
 
 if __name__ == '__main__':

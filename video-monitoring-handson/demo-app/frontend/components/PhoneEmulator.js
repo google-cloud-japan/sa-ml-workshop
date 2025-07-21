@@ -1,6 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { auth, signInWithGoogle } from "lib/firebase";
-import { signOut } from "firebase/auth";
 import { AutocallBackendAPI } from "lib/autocall-backend";
 import {
   LiveAudioInputManager,
@@ -11,43 +9,6 @@ import {
 export default function PhoneEmulator() {
 
   const BACKEND_URL = process.env.NEXT_PUBLIC_AUTOCALL_BACKEND_URL;
-
-//// Google login settings
-  const [loginUser, setLoginUser] = useState(null);
-
-  // Register login state change handler
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setLoginUser(user);
-      if (auth.currentUser && !auth.currentUser.email.endsWith("@google.com")) {
-        signOut(auth);
-        return;
-      }
-    });
-    return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    if (!loginUser) {
-      const _manualDisconnect = async () => {await manualDisconnect()};
-      _manualDisconnect();
-      return;
-    }
-  }, [loginUser]); 
-
-  const loginButton = (
-    <button className="bg-green-500 hover:bg-green-600
-                       text-white font-bold py-2 px-4 rounded"
-           onClick={signInWithGoogle}>Login with Google Account</button>
-  );
-
-  const logoutButton = (
-    <button className="bg-red-500 hover:bg-red-600
-                       text-white font-bold py-2 px-4 rounded"
-           onClick={() => signOut(auth)}>Logout</button>
-  );
-////
-
   const generateRandomPhoneNumber = () => {
     const part1 = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     const part2 = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
@@ -158,15 +119,6 @@ export default function PhoneEmulator() {
         return;
       }
     }
-    await sleep(500); // For stability.
-
-    console.log("send id token.")
-    const token = await auth.currentUser.getIdToken();
-    const request = {
-      type: "token",
-      data: token,
-    };
-    autocallApi.sendMessage(request);
 
     // Set reconnect handler.
     console.log("Setting reconnect handler.");
@@ -351,25 +303,6 @@ export default function PhoneEmulator() {
       </div>
     </div>
   );
-
-//// Google login settings
-  if (!loginUser) {
-    element = (
-    <>
-      <div className="flex flex-col h-screen">
-        <header className="bg-white p-4 shadow-md z-10 flex-shrink-0">
-          <div className="text-2xl font-bold text-gray-800">
-            Phone Emulator
-          </div>
-          <br/>
-          <div>{loginButton}</div>
-          <br/>
-        </header>
-      </div>
-    </>
-    )
-  }
-////
 
   return element;
 }

@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { auth, signInWithGoogle } from "lib/firebase";
-import { signOut } from "firebase/auth";
 import TextChat from "components/TextChat";
 import DropdownMenu from "components/DropdownMenu";
 import { MonitoringBackendAPI } from "lib/monitoring-backend";
@@ -16,34 +14,6 @@ export default function WebConsole() {
 
   const MONITORING_BACKEND_URL = process.env.NEXT_PUBLIC_MONITORING_BACKEND_URL;
   const AUTOCALL_BACKEND_URL = process.env.NEXT_PUBLIC_AUTOCALL_BACKEND_URL;
-
-//// Google login settings
-  const [loginUser, setLoginUser] = useState(null);
-
-  // Register login state change handler
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setLoginUser(user);
-      if (auth.currentUser && !auth.currentUser.email.endsWith("@google.com")) {
-        signOut(auth);
-        return;
-      }
-    });
-    return unsubscribe;
-  }, []);
-
-  const loginButton = (
-    <button className="bg-green-500 hover:bg-green-600
-                       text-white font-bold py-2 px-4 rounded"
-           onClick={signInWithGoogle}>Login with Google Account</button>
-  );
-
-  const logoutButton = (
-    <button className="bg-red-500 hover:bg-red-600
-                       text-white font-bold py-2 px-4 rounded"
-           onClick={() => signOut(auth)}>Logout</button>
-  );
-////
 
   const monitoringTextInit = "## Monitoring Message"
   const [monitoringText, setMonitoringText] = useState(monitoringTextInit);
@@ -75,15 +45,10 @@ export default function WebConsole() {
   const MAX_RECONNECT_DELAY = 30000;
 
   useEffect(() => {
-    if (!loginUser) {
-      const _manualDisconnect = async () => {await manualDisconnect()};
-      _manualDisconnect();
-      return;
-    }
     const videoElement = document.getElementById("video");
     const canvasElement = document.getElementById("canvas");
     _liveVideoManager.current = new LiveVideoManager(videoElement, canvasElement);
-  }, [loginUser]); 
+  }, []); 
 
   useEffect(() => {
     if (videoInput) {
@@ -177,24 +142,6 @@ export default function WebConsole() {
         return;
       }
     }
-    await sleep(200); // For stability.
-    console.log("send id token.")
-    const token = await auth.currentUser.getIdToken();
-    const request = {
-      type: "token",
-      data: token,
-    };
-    monitoringApi.sendMessage(request);
-/*
-    await autocallConnect();
-    await sleep(1000); // For stability.
-    if (!autocallApi.isConnected()) {
-      console.log("failed to connect autocall backend.");
-      disconnect();
-      return;
-    }
-    autocallDisconnect();
-*/
 
     // Set reconnect handler.
     console.log("Setting monitoring reconnect handler.");
@@ -242,13 +189,6 @@ export default function WebConsole() {
         return;
       }
     }
-    console.log("send id token.")
-    const token = await auth.currentUser.getIdToken();
-    const request = {
-      type: "token",
-      data: token,
-    };
-    autocallApi.sendMessage(request);
     setAutocallRunning(true);
   };
 
@@ -417,7 +357,6 @@ Start a conversation with the security operator now.
           <div className="text-2xl font-bold text-gray-800">
             Live Video Monitoring Console
           </div>
-          {logoutButton}
           <div className="text-1xl text-black bg-gray-200 rounded px-2 py-1">
             <Link href="./voice_client" target="_blank" rel="noopener noreferrer">
               Open Phone Emulator
@@ -471,25 +410,6 @@ Start a conversation with the security operator now.
       </div>
     </div>
   );
-
-//// Google login settings
-  if (!loginUser) {
-    element = (
-    <>
-      <div className="flex flex-col h-screen">
-        <header className="bg-white p-4 shadow-md z-10 flex-shrink-0">
-          <div className="text-2xl font-bold text-gray-800">
-	    Video Monitoring Demo
-          </div>
-          <br/>
-          <div>{loginButton}</div>
-          <br/>
-        </header>
-      </div>
-    </>
-    )
-  }
-////
 
   return element;
 }

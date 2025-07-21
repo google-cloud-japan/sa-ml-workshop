@@ -6,4 +6,3 @@ google-adk==1.7.0
 google-cloud-aiplatform==1.104.0
 google-genai==1.26.0
 uvicorn==0.35.0
-firebase-admin==6.9.0

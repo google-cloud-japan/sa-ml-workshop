@@ -73,7 +73,7 @@ fi
   
 if $DEPLOY_MONITORING_BACKEND; then
   pushd monitoring_backend
-  gcloud run deploy video-monitoring-backend --source . \
+  gcloud run deploy demo-monitoring-backend --source . \
     --region $REGION \
     --allow-unauthenticated \
     --service-account $SERVICE_ACCOUNT \
@@ -84,7 +84,7 @@ fi
 
 if $DEPLOY_AUTOCALL_BACKEND; then
   pushd autocall_backend
-  gcloud run deploy autocall-backend --source . \
+  gcloud run deploy demo-autocall-backend --source . \
     --region $REGION \
     --allow-unauthenticated \
     --service-account $SERVICE_ACCOUNT \
@@ -95,10 +95,10 @@ if $DEPLOY_AUTOCALL_BACKEND; then
 fi
 
 MONITORING_BACKEND_URL=$(gcloud run services list --format json | \
-  jq .[].status.url | grep -E "video-monitoring-backend.*\.run\.app" | sed s/\"//g)
+  jq .[].status.url | grep -E "demo-monitoring-backend.*\.run\.app" | sed s/\"//g)
 
 AUTOCALL_BACKEND_URL=$(gcloud run services list --format json | \
-  jq .[].status.url | grep -E "autocall-backend.*\.run\.app" | sed s/\"//g)
+  jq .[].status.url | grep -E "demo-autocall-backend.*\.run\.app" | sed s/\"//g)
 
 
 if $DEPLOY_FRONTEND; then
@@ -114,19 +114,12 @@ if $DEPLOY_FRONTEND; then
     gcloud iam service-accounts create video-monitoring-app-sa \
       --display-name "Service Account for Video Monitoring App"
     sleep 10
-
-#    gcloud projects add-iam-policy-binding $PROJECT_ID \
-#      --role roles/run.invoker \
-#      --member serviceAccount:$SERVICE_ACCOUNT
-
-#    echo "Wait 60 seconds for ACLs to be propagated."
-#    sleep 60
   fi
 
   pushd frontend
   echo "NEXT_PUBLIC_MONITORING_BACKEND_URL=\"${MONITORING_BACKEND_URL//https/wss}/ws\"" > .env.local
   echo "NEXT_PUBLIC_AUTOCALL_BACKEND_URL=\"${AUTOCALL_BACKEND_URL//https/wss}\"" >> .env.local
-  gcloud run deploy video-monitoring-app --source . \
+  gcloud run deploy demo-video-monitoring-app --source . \
     --region $REGION \
     --allow-unauthenticated \
     --service-account $SERVICE_ACCOUNT \
@@ -135,7 +128,7 @@ if $DEPLOY_FRONTEND; then
 fi
 
 APP_URL=$(gcloud run services list --format json | \
-  jq .[].status.url | grep -E "video-monitoring-app-.*\.run\.app" | sed s/\"//g)
+  jq .[].status.url | grep -E "demo-video-monitoring-app-.*\.run\.app" | sed s/\"//g)
 
 echo ""
 echo "Done."

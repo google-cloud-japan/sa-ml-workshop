@@ -8,9 +8,6 @@ import sys
 import threading
 import uuid
 
-import firebase_admin
-from firebase_admin import auth
-
 import google.auth
 from google import genai
 from google.genai.types import (
@@ -257,60 +254,10 @@ async def read_root():
     return {'status': 'ok'}
 
 
-def set_timer(delay, coro_func, *args):
-    loop = asyncio.get_running_loop()
-
-    def callback():
-        coro = coro_func(*args)
-        asyncio.run_coroutine_threadsafe(coro, loop)
-
-    timer = threading.Timer(delay, callback)
-    timer.start()
-    return timer
-
-
-def verify_id_token(id_token):
-    logger.info(f'id token {id_token}')
-    try:
-        firebase_admin.initialize_app()
-    except ValueError as err:
-        if 'already exists' not in str(err):
-            logger.error(f'Firebase initialization error: {err}')
-
-    try:
-        decoded_token = auth.verify_id_token(id_token)
-        logger.info(decoded_token)
-        return decoded_token
-    except Exception as e:
-        logger.info(f'auth error {e}')
-        return None
-
-
-async def auth_id_token(websocket):
-    close_timer = set_timer(5, websocket.close)
-    try:
-        async for _message in websocket.iter_text():
-            message = json.loads(_message)
-            if message['type'] != 'token':
-                continue
-            if verify_id_token(message['data']):
-                close_timer.cancel()
-                return True
-        return False
-    except websockets.exceptions.ConnectionClosed:
-        return False
-    except Exception as e:
-        logger.error(f'error on token verification: {e}');
-        return False
-
-
 @app.websocket('/ws')
 async def monitoring_endpoint(websocket: WebSocket):
     try:
         await websocket.accept()
-        if not await auth_id_token(websocket):
-            logger.info('authentication failed.')
-            return
         session_id = str(uuid.uuid4())[:8]
         backend = MonitoringBackend(websocket)
         await backend.run(session_id)
