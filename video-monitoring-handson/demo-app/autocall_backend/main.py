@@ -123,7 +123,7 @@ async def disconnect_phone(phone_id):
             'phone_id': phone_id,
         })
         await send_frontend_message(phone_id, 'Conversation finished.')
-        # closing the frontend session. voice clinet handler is kept alive.
+        # closing the frontend session. voice client handler is kept alive.
         await cancel_tasks(phone_id)
 
     except Exception as e:
