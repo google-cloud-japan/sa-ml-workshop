@@ -41,7 +41,7 @@ export default function PhoneEmulator() {
   useEffect(() => {
     if (phoneStatus === "on") {
       startAudioInput();
-//      startAudioStream();
+      setMicStatus("off");
       sendTextMessage("[connection established]");
     } else if (phoneStatus === "off") {
       stopAudioStream();
