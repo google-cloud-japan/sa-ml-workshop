@@ -38,6 +38,7 @@ export default function VoiceClient() {
   useEffect(() => {
     if (connectionStatus == "connected") {
       startAudioInput();
+      setMicStatus("off");
     } else {
       stopAudioStream();
       stopAudioInput();
