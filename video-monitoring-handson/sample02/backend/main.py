@@ -157,6 +157,7 @@ class VoicetalkBackend:
         logger.info('start conversation')
         self.live_events, self.live_request_queue = await self.create_runner() 
 
+        await asyncio.sleep(3)
         text = f'Hello. Please talk in {LANGUAGE}.'
         content = Content(role='user', parts=[Part(text=text)])
         self.live_request_queue.send_content(content=content)
