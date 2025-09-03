@@ -40,13 +40,6 @@ Disclaimer: This is not an official Google product
   9     "next": "14.2.5",
 ```
 
-### 2.3.1 Firebaseへのプロジェクト登録
-リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
-
-**p.30**
-- 変更前：ここでは、プルダウンメニューから既存のGoogle Cloudのプロジェクトが選択できるので、
-- 変更前：「Google Cloud プロジェクトに Firebase を追加」をクリックすると、プルダウンメニューから既存のGoogle Cloudのプロジェクトが選択できるので、
-
 ### 3.1.1 Vertex AI Studio で PaLM API を体験
 リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
 
@@ -59,6 +52,10 @@ Cloud Run にデプロイしたサービスの URL の末尾が `-an.a.run.pp` �
 **p.66**
 - 変更前：「text-bison@002」が安定版の推奨モデルになっていますので、
 - 変更後：「gemini-2.5-flash-lite」が安定版の推奨モデルになっていますので、
+
+**p.69**
+
+「文書の分類処理」で説明している「構造化」のボタンが UI から削除されているので、この部分の内容は無視してください。
 
 ### 3.1.2 Python SDK による PaLM API の利用
 リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
@@ -92,10 +89,12 @@ Cloud Run にデプロイしたサービスの URL の末尾が `-an.a.run.pp` �
   3         model=model,
   4         contents=prompt,
   5         config=genai.types.GenerateContentConfig(
-  6             temperature=0.4, max_output_tokens=65535
+  6             temperature=0.4, max_output_tokens=1024
   7         )
   8     return response.candidates[0].content.parts[-1]
 ```
+
+`max_output_tokens` オプションの値は最大で `65535` が指定できます。
 
 **p.76**
 - 変更前
@@ -103,6 +102,7 @@ Cloud Run にデプロイしたサービスの URL の末尾が `-an.a.run.pp` �
 print(response.safety_attributes)
 ```
 - 変更後
+
 Gemini 2.5 では safety_attributes は取得できませんので、この部分は無視してください。
 
 ### 3.2.1 ノートブックでのプロトタイピング
@@ -599,7 +599,8 @@ gcloud eventarc triggers create trigger-deleted-document-qa-service \
   --service-account $SERVICE_ACCOUNT \
   --destination-run-path /api/post
 ```
-- 変更後```
+- 変更後
+```
 SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
 gcloud eventarc triggers create trigger-deleted-document-qa-service \
   --destination-run-service document-qa-service \
