@@ -1,70 +1,52 @@
 import base64
 import json
 import os
-import vertexai
+from PIL import Image
+from io import BytesIO
 from flask import Flask, request
-from vertexai import generative_models
-from vertexai.vision_models import Image
-from vertexai.vision_models import ImageCaptioningModel
-from vertexai.vision_models import ImageQnAModel
+from google import genai, auth
+from google.genai.types import Part, Content
+import vertexai
 
-vertexai.init(location='asia-northeast1')
-generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
-image_captioning_model = ImageCaptioningModel.from_pretrained('imagetext@001')
-image_qna_model = ImageQnAModel.from_pretrained('imagetext@001')
+_, PROJECT_ID = auth.default()
+vertexai.init(project=PROJECT_ID, location='us-central1')
+client = genai.Client(vertexai=True, project=PROJECT_ID, location='us-central1')
 
 app = Flask(__name__)
 
 
-def get_image_description(image):
-    try:
-        results = image_captioning_model.get_captions(
-            image=image, number_of_results=3)
-        results.sort(key=len)
-        return results[-1]
-    except:
-        return None
-
-
-def get_fashion_items(image):
-    try:
-        results = image_qna_model.ask_question(
-            image=image,
-            question='details of the fashion items in the picture.',
-            number_of_results=3)
-        results = sorted([item.replace('unanswerable', '') for item in results], key=len)
-        return results[-1]
-    except:
-        return None
-
-
 def get_compliment_message(image):
-    prompt = '''\
-ファッションアドバイザーの立場で、以下の様に記述される人物を褒め称える文章を作ってください。
+    instruction = '''
+ファッションアドバイザーの立場で、画像に含まれる人物を褒め称える文章を作ってください。
 ファッションアイテムに言及しながら、その人物に語りかける様に、数行の文章を作ってください。
 個人を特定する名前は使用しないでください。
-
-記述：{}
-
-ファッションアイテム：{}
 '''
-    description = get_image_description(image)
-    items = get_fashion_items(image)
+    img_byte = BytesIO()
+    image.save(img_byte, format='PNG')
+    parts = [
+        Part(text='[image]'),
+        Part.from_bytes(data=img_byte.getvalue(), mime_type='image/png')
+    ]
+    contents = [Content(role='user', parts=parts)]
 
-    if description is None or items is None:
-        return '他の画像をアップロードしてください。'
-
-    response = generation_model.generate_content(
-        prompt.format(description, items),
-        generation_config={'temperature': 0.2, 'max_output_tokens': 1024})
-    return response.text.lstrip()
+    response = client.models.generate_content(
+        model='gemini-2.5-flash-lite',
+        contents=contents,
+        config=genai.types.GenerateContentConfig(
+            system_instruction=instruction,
+            temperature=0.2, max_output_tokens=1024
+        )
+    )
+    return response.candidates[0].content.parts[-1].text
 
 
 @app.route('/api/compliment', methods=['POST'])
 def fashion_compliment():
     json_data = request.get_json()
     image_base64 = json_data['image']
-    image = Image(base64.b64decode(image_base64))
+    image_data = base64.b64decode(image_base64)
+    image = Image.open(io.BytesIO(image_data))
+
     message = get_compliment_message(image)
     resp = {'message': message}
 

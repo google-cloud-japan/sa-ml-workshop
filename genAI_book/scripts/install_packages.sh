@@ -62,10 +62,10 @@ cat <<'EOF' > ~/.login_message
 すが、今後 PaLM 2 が提供終了の予定となっており、後継の Gemini への移行が必要となり
 ます。
 
-そのため、サンプルコード用リポジトリ内のコードとノートブックは、Gemini (gemini-1.5
--flash) を使用するようにコードの修正が行われています。\e[34;1m書籍に記載のコードをそのまま
-入力するのではなく、ディレクトリ $HOME/genAI_book 以下のコードをコピーして利用する
-ようにしてください。\e[m
+そのため、サンプルコード用リポジトリ内のコードとノートブックは、Gemini (gemini-2.5
+-flash-lite) を使用するようにコードの修正が行われています。\e[34;1m書籍に記載のコードを
+そのまま入力するのではなく、ディレクトリ $HOME/genAI_book 以下のコードをコピーして
+利用するようにしてください。\e[m
 
 書籍に記載のコードとの差分については、以下のリンクを参照してください。
 https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/README.md

@@ -1,3 +1,4 @@
 Flask==2.3.2
 gunicorn==22.0.0
-google-cloud-aiplatform==1.42.1
+google-cloud-aiplatform==1.111.0
+pillow==11.3.0

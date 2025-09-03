@@ -5,9 +5,9 @@
 Disclaimer: This is not an official Google product
 
 # PaLM 2 から Gemini への移行について
-**2024年8月2日記載**
+**2025年9月3日記載**
 
-本書では Google Cloud で提供される大規模言語モデル PaLM 2 (text-bison) を使用していますが、今後 PaLM 2 が提供終了の予定となっており、後継の Gemini への移行が必要となります。そのため、このリポジトリ内のコードとノートブックは、Gemini (gemini-1.5-flash) を使用するようにコードの修正が行われています。
+本書では Google Cloud で提供される大規模言語モデル PaLM 2 (text-bison) を使用していますが、今後 PaLM 2 が提供終了の予定となっており、後継の Gemini への移行が必要となります。そのため、このリポジトリ内のコードとノートブックは、Gemini (gemini-2.5-flash-lite) を使用するようにコードの修正が行われています。
 
 書籍に記載のコードをそのまま入力するのではなく、このリポジトリ内のコードをコピーして使用することをお勧めします。
 
@@ -40,12 +40,25 @@ Disclaimer: This is not an official Google product
   9     "next": "14.2.5",
 ```
 
+### 2.3.1 Firebaseへのプロジェクト登録
+リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
+
+**p.30**
+- 変更前：ここでは、プルダウンメニューから既存のGoogle Cloudのプロジェクトが選択できるので、
+- 変更前：「Google Cloud プロジェクトに Firebase を追加」をクリックすると、プルダウンメニューから既存のGoogle Cloudのプロジェクトが選択できるので、
+
 ### 3.1.1 Vertex AI Studio で PaLM API を体験
 リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
 
+**p.62**
+- 変更前：ブラウザから「`https://test-app-xxxxxx-an.a.run.app/wordCount`」にアクセスすると
+- 変更後：ブラウザから「`https://test-app-xxxxxx.asia-northeast1.run.app/wordCount`」にアクセスすると
+
+Cloud Run にデプロイしたサービスの URL の末尾が `-an.a.run.pp` から `.asia-northeast1.run.app` に変わっています。これ以降に登場する Cloud Run のサービス URL すべてについて同様に読み替えてください。
+
 **p.66**
 - 変更前：「text-bison@002」が安定版の推奨モデルになっていますので、
-- 変更後：「gemini-1.5-flash-001」が安定版の推奨モデルになっていますので、
+- 変更後：「gemini-2.5-flash-lite」が安定版の推奨モデルになっていますので、
 
 ### 3.1.2 Python SDK による PaLM API の利用
 リポジトリ内のコード変更はありませんが、本文の内容を次のように読み替えてください。
@@ -58,8 +71,10 @@ Disclaimer: This is not an official Google product
 ```
 - 変更後
 ```
-  1 from vertexai import generative_models
-  2 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
+  1 from google import genai
+  2 [PROJECT_ID] = !gcloud config list --format 'value(core.project)'
+  3 client = genai.Client(vertexai=True, project=PROJECT_ID, location='us-central1')
+  4 model='gemini-2.5-flash-lite'
 ```
 
 **p.75**
@@ -73,9 +88,13 @@ Disclaimer: This is not an official Google product
 - 変更後
 ```
   1 def get_response(prompt):
-  2     response = generation_model.generate_content(
-  3         prompt, generation_config={'temperature': 0.2, 'max_output_tokens': 1024})
-  4     return response
+  2     response = client.models.generate_content(
+  3         model=model,
+  4         contents=prompt,
+  5         config=genai.types.GenerateContentConfig(
+  6             temperature=0.4, max_output_tokens=65535
+  7         )
+  8     return response.candidates[0].content.parts[-1]
 ```
 
 **p.76**
@@ -84,10 +103,7 @@ Disclaimer: This is not an official Google product
 print(response.safety_attributes)
 ```
 - 変更後
-```
-{str(item.category).split('.')[1]: item.probability_score
- for item in response.candidates[0].safety_ratings}
-```
+Gemini 2.5 では safety_attributes は取得できませんので、この部分は無視してください。
 
 ### 3.2.1 ノートブックでのプロトタイピング
 ノートブックファイル [`Notebooks/Grammar Correction with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Grammar%20Correction%20with%20PaLM%20API.ipynb)
@@ -109,15 +125,21 @@ print(response.safety_attributes)
 - 変更後
 ```
   1 import vertexai
-  2 from vertexai import generative_models
-  3
+  2 from google import genai
+  3 
   4 vertexai.init(location='asia-northeast1')
-  5 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
-  6
-  7 def get_response(prompt, temperature=0.2):
-  8     response = generation_model.generate_content(
-  9         prompt, generation_config={'temperature': temperature, 'max_output_tokens': 1024})
- 10     return response.text.lstrip()
+  5 [PROJECT_ID] = !gcloud config list --format 'value(core.project)'
+  6 client = genai.Client(vertexai=True, project=PROJECT_ID, location='us-central1')
+  7 
+  8 def get_response(prompt, temperature=0.2):
+  9     response = client.models.generate_content(
+ 10         model='gemini-2.5-flash-lite',
+ 10         contents=prompt,
+ 11         config=genai.types.GenerateContentConfig(
+ 12             temperature=temperature, max_output_tokens=65535
+ 13         )
+ 14     )
+ 15     return response.candidates[0].content.parts[-1].text
 ```
 
 **p.79**
@@ -142,7 +164,7 @@ print(response.safety_attributes)
 - 変更後
 ```
   2 gunicorn==22.0.0
-  3 google-cloud-aiplatform==1.42.1
+  3 google-cloud-aiplatform==1.111.0
 ```
 
 ファイル [`GrammarCorrection/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/main.py)
@@ -159,48 +181,44 @@ print(response.safety_attributes)
  13     response = generation_model.predict(
  14         prompt, temperature=temperature, max_output_tokens=1024)
  15     return response.text.lstrip()
-...
- 33     prompt = '''\
- 34 「text:」以下の英文をより自然で洗練された英文に書き直した例を3つ示してください。
 ```
 - 変更後
 ```
-  5 from vertexai import generative_models
+  5 from google import genai, auth
   6
-  7 vertexai.init(location='asia-northeast1')
-  8 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
-...
- 12 def get_response(prompt, temperature=0.2):
- 13     response = generation_model.generate_content(
- 14         prompt, generation_config={'temperature': temperature, 'max_output_tokens': 1024})
- 15     return response.text.lstrip()
-...
- 33     prompt = '''\
- 34 「text:」以下の英文をより自然で洗練された英文に書き直した例を3つ示してください。書き直した文章のみを出力すること。
+  7 _, PROJECT_ID = auth.default()
+  8 vertexai.init(project=PROJECT_ID, location='us-central1')
+  9 client = genai.Client(vertexai=True, project=PROJECT_ID, location='us-central1')
+ 10 app = Flask(__name__)
+ 11 
+ 12 
+ 13 def get_response(prompt, temperature=0.2):
+ 14     response = client.models.generate_content(
+ 15         model='gemini-2.5-flash-lite',
+ 16         contents=prompt,
+ 17         config=genai.types.GenerateContentConfig(
+ 18             temperature=temperature, max_output_tokens=1024
+ 19         )
+ 20     )
+ 21     return response.candidates[0].content.parts[-1].text
+```
+
+ファイル [`GrammarCorrection/backend/Dockerfile`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/Dockerfile)
+
+**p.86**
+- 変更前
+```
+  3 FROM python:3.8-slim
+```
+- 変更後
+```
+  3 FROM python:3.11-slim
 ```
 
 ### 3.3.2 ノートブックでのプロトタイピング
 ノートブックファイル [`Notebooks/Fashion Compliment.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Fashion%20Compliment.ipynb)
 
-**p.108**
-- 変更前
-```
-  1 from vertexai.language_models import TextGenerationModel
-  2 generation_model = TextGenerationModel.from_pretrained('text-bison@002')
-...
- 16     response = generation_model.predict(
- 17         prompt.format(description, items),
- 18         temperature=0.2, max_output_tokens=1024)
-```
-- 変更後
-```
-  1 from vertexai import generative_models
-  2 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
-...
- 16     response = generation_model.generate_content(
- 17         prompt.format(description, items),
- 18         generation_config={'temperature': 0.2, 'max_output_tokens': 1024})
-```
+このノートブックでは、Visual Captioning と Visual QA の API を使用せずにすべての処理を gemini-2.5-flash-lite で処理するように書き換えています。詳細については、ノートブックの内容を参照してください。
 
 ### 3.3.3 Web アプリケーションの実装
 ファイル [`FashionCompliment/backend/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/requirements.txt)
@@ -214,35 +232,42 @@ print(response.safety_attributes)
 - 変更後
 ```
   2 gunicorn==22.0.0
-  3 google-cloud-aiplatform==1.42.1
+  3 google-cloud-aiplatform==1.111.0
+  4 pillow==11.3.0
+```
+
+ファイル [`FashionCompliment/backend/Dockerfile`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/Dockerfile)
+
+**p.109**
+- 変更前
+```
+  3 FROM python:3.8-slim
+```
+- 変更後
+```
+  3 FROM python:3.11-slim
 ```
 
 ファイル [`FashionCompliment/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/main.py)
 
-**p.110, p.111**
+バックエンドのコードでは、すべての処理を gemini-2.5-flash-lite で処理するように書き換えています。詳細はファイルの内容を確認してください。
+
+**本文内のコマンドの変更**
+
+**p.112**
+
+gunicorn を起動する前に、必要なパッケージを pip コマンドでインストールしてください。
+
 - 変更前
 ```
-  6 from vertexai.language_models import TextGenerationModel
-...
- 12 generation_model = TextGenerationModel.from_pretrained('text-bison@002')
-...
- 35         results.sort(key=len)
-...
- 57     response = generation_model.predict(
- 58         prompt.format(description, items),
- 59         temperature=0.2, max_output_tokens=1024)
+gunicorn --bind localhost:8080 --reload --log-level debug \
+main:app
 ```
 - 変更後
 ```
-  6 from vertexai import generative_models
-...
- 12 generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
-...
- 35         results = sorted([item.replace('unanswerable', '') for item in results], key=len)
-...
- 57     response = generation_model.generate_content(
- 58         prompt.format(description, items),
- 59         generation_config={'temperature': 0.2, 'max_output_tokens': 1024})
+pip install -r requirements.txt
+gunicorn --bind localhost:8080 --reload --log-level debug \
+main:app
 ```
 
 ### 4.1.1 LangChain 入門
@@ -258,8 +283,8 @@ print(response.safety_attributes)
 - 変更後
 ```
   1 !pip install --user \
-  2   langchain==0.1.0 langchain-google-vertexai==0.0.6 \
-  3   google-cloud-aiplatform==1.42.1
+  2   langchain==0.3.27 langchain-google-vertexai==2.0.28 \
+  3   google-cloud-aiplatform==1.111.0
 ```
 
 **p.126**
@@ -288,7 +313,7 @@ print(response.safety_attributes)
 - 変更後
 ```
   1 from langchain_google_vertexai import VertexAI
-  2 llm = VertexAI(model_name='gemini-1.5-flash-001', location='asia-northeast1',
+  2 llm = VertexAI(model_name='gemini-2.5-flash-lite', location='us-central1',
   3                temperature=0.4, max_output_tokens=128)
 ```
 
@@ -307,10 +332,11 @@ print(response.safety_attributes)
 - 変更後
 ```
   1 !pip install --user \
-  2   langchain==0.1.0 transformers==4.36.0 \
-  3   pypdf==3.17.0 cryptography==42.0.4 \
-  4   langchain-google-vertexai==0.0.6 \
-  5   google-cloud-aiplatform==1.42.1
+  2   langchain==0.3.27 transformers==4.36.0 \
+  3   pypdf==6.0.0 cryptography==42.0.4 \
+  4   langchain-google-vertexai==2.0.28 \
+  5   google-cloud-aiplatform==1.111.0 \
+  6   langchain-community==0.3.29
 ```
 
 **p.133**
@@ -323,8 +349,8 @@ print(response.safety_attributes)
 - 変更後
 ```
   1 from langchain_google_vertexai import VertexAI
-  2 llm = VertexAI(model_name='gemini-1.5-flash-001', location='asia-northeast1',
-  3                temperature=0.1, max_output_tokens=128)
+  2 llm = VertexAI(model_name='gemini-2.5-flash-lite', location='us-central1',
+  3                temperature=0.1, max_output_tokens=1024)
 ```
 
 **p.135**
@@ -355,6 +381,16 @@ print(response.safety_attributes)
   8     prompt = '{} 日本語で200字程度にまとめて教えてください。マークダウンを使用せずにプレーンテキストで出力。'.format(question)'
 ```
 
+**p.136**
+- 変更前
+```
+  1     question = 'サイバーセキュリティ対策のポイントを箇条書きにまとめてください。'
+```
+- 変更後
+```
+  1     question = 'サイバーセキュリティ対策のポイント９か条を箇条書きにまとめてください。'
+```
+
 ### 4.2.1 Eventarc によるイベント連携
 ファイル [`EventarcTest/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/EventarcTest/requirements.txt)
 
@@ -368,8 +404,55 @@ print(response.safety_attributes)
   2 gunicorn==22.0.0
 ```
 
+**本文内のコマンドの変更**
+
+**p.143**
+
+本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
+
+- 変更前
+```
+SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud eventarc triggers create trigger-eventarc-test-service \
+  --destination-run-service eventarc-test-service \
+  --destination-run-region asia-northeast1 \
+  --destination-run-path /api/post \
+  --event-filters "type=google.cloud.storage.object.v1.finalized" \
+  --event-filters "bucket=$GOOGLE_CLOUD_PROJECT.appspot.com" \
+  --location asia-northeast1 \
+  --service-account $SERVICE_ACCOUNT
+```
+- 変更後
+```
+SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud eventarc triggers create trigger-eventarc-test-service \
+  --destination-run-service eventarc-test-service \
+  --destination-run-region asia-northeast1 \
+  --destination-run-path /api/post \
+  --event-filters "type=google.cloud.storage.object.v1.finalized" \
+  --event-filters "bucket=$GOOGLE_CLOUD_PROJECT.firebasestorage.app" \
+  --location asia-northeast1 \
+  --service-account $SERVICE_ACCOUNT
+```
+
+**p.144**
+
+本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
+- 変更前
+```
+date > /tmp/testfile.txt
+gsutil cp /tmp/testfile.txt \
+  gs://$GOOGLE_CLOUD_PROJECT.appspot.com/test/testfile.txt
+```
+- 変更後
+```
+date > /tmp/testfile.txt
+gsutil cp /tmp/testfile.txt \
+  gs://$GOOGLE_CLOUD_PROJECT.firebasestorage.app/test/testfile.txt
+```
+
 ### 4.2.2 Web アプリケーションの実装
-ファイル [`FashionCompliment/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/SmartDrive/backend/main.py)
+ファイル [`SmartDrive/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/SmartDrive/backend/main.py)
 
 **p.147**
 - 変更前
@@ -381,7 +464,7 @@ print(response.safety_attributes)
 - 変更後
 ```
  13 llm = VertexAI(
- 14     model_name='gemini-1.5-flash-001', location='asia-northeast1',
+ 14     model_name='gemini-2.5-flash-lite', location='us-central1',
  15     temperature=0.1, max_output_tokens=1024)
 ```
 
@@ -403,37 +486,127 @@ print(response.safety_attributes)
  87         {'input_document': document, 'question': prompt})['output_text'].replace('FINAL ANSWER: ', '')
 ```
 
+**本文内のコマンドの変更**
+
+**p.152**
+
+本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
+
+- 変更前
+```
+SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud eventarc triggers create trigger-pdf-summary-service \
+  --destination-run-service pdf-summary-service \
+  --destination-run-region asia-northeast1 \
+  --location asia-northeast1 \
+  --event-filters "type=google.cloud.storage.object.v1.finalized" \
+  --event-filters "bucket=$GOOGLE_CLOUD_PROJECT.appspot.com" \
+  --service-account $SERVICE_ACCOUNT \
+  --destination-run-path /api/post
+```
+- 変更後
+```
+SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud eventarc triggers create trigger-pdf-summary-service \
+  --destination-run-service pdf-summary-service \
+  --destination-run-region asia-northeast1 \
+  --location asia-northeast1 \
+  --event-filters "type=google.cloud.storage.object.v1.finalized" \
+  --event-filters "bucket=$GOOGLE_CLOUD_PROJECT.firebasestorage.app" \
+  --service-account $SERVICE_ACCOUNT \
+  --destination-run-path /api/post
+```
+
+**p.153**
+
+本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
+- 変更前
+```
+gsutil cp $HOME/genAI_book/PDF/handbook-prologue.pdf \
+  gs://$GOOGLE_CLOUD_PROJECT.appspot.com/test/handbook-prologue.pdf
+```
+- 変更後
+```
+gsutil cp $HOME/genAI_book/PDF/handbook-prologue.pdf \
+  gs://$GOOGLE_CLOUD_PROJECT.firebasestorage.app/test/handbook-prologue.pdf
+```
+
+**p.155**
+
+本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
+- 変更前
+```
+gsutil cors set cors.json gs://$GOOGLE_CLOUD_PROJECT.appspot.com
+```
+- 変更後
+```
+gsutil cors set cors.json gs://$GOOGLE_CLOUD_PROJECT.firebasestorage.app
+```
+
 ### 5.1.2 ノートブックでのプロトタイピング
 ノートブックファイル [`Notebooks/Document QA.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Document%20QA.ipynb)
 
-**p.168**
+このノートブックでは、Embedding API を使用せずに、エンベディングモデル gemini-embedding-001 を GenAI API から利用するように書き換えています。詳細については、ノートブックの内容を参照してください。
+
+### 5.2.1 バックエンドの実装確認とデプロイ
+
+ファイル [`DocumentQA/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/DocumentQA/backend/main.py)
+
+埋め込みベクトルの作成をノートブックで確認した方法（エンベディングモデル gemini-embedding-001 を GenAI API から利用する方法）に変更しています。本文での説明には大きな影響はありませんが、実際のコードと行番号がずれている点に注意してください。
+
+**本文内のコマンドの変更**
+
+**p.182**
+
+本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
 - 変更前
 ```
-  1 !pip install --user \
-  2   langchain==0.1.0 transformers==4.36.0 \
-  3   pypdf==3.17.0 cryptography==42.0.4 \
-  4   pg8000==1.30.4 cloud-sql-python-connector[pg8000]==1.7.0 \
-  5   langchain-google-vertexai==0.0.5 \
-  6   google-cloud-aiplatform==1.39.0
+SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud eventarc triggers create trigger-finalized-document-qa-service \
+  --destination-run-service document-qa-service \
+  --destination-run-region asia-northeast1 \
+  --location asia-northeast1 \
+  --event-filters "type=google.cloud.storage.object.v1.finalized" \
+  --event-filters "bucket=$GOOGLE_CLOUD_PROJECT.appspot.com" \
+  --service-account $SERVICE_ACCOUNT \
+  --destination-run-path /api/post
 ```
 - 変更後
 ```
-  1 !pip install --user \
-  2   langchain==0.1.0 transformers==4.36.0 \
-  3   pypdf==3.17.0 cryptography==42.0.4 \
-  4   pg8000==1.30.4 cloud-sql-python-connector[pg8000]==1.7.0 \
-  5   langchain-google-vertexai==0.0.6 \
-  6   google-cloud-aiplatform==1.42.1
+SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud eventarc triggers create trigger-finalized-document-qa-service \
+  --destination-run-service document-qa-service \
+  --destination-run-region asia-northeast1 \
+  --location asia-northeast1 \
+  --event-filters "type=google.cloud.storage.object.v1.finalized" \
+  --event-filters "bucket=$GOOGLE_CLOUD_PROJECT.firebasestorage.app" \
+  --service-account $SERVICE_ACCOUNT \
+  --destination-run-path /api/post
 ```
 
-**p.174**
+**p.183**
+
+本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
 - 変更前
 ```
-  6 llm = VertexAI(model_name='text-bison@002', location='asia-northeast1',
-  7                temperature=0.1, max_output_tokens=256)
+SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud eventarc triggers create trigger-deleted-document-qa-service \
+  --destination-run-service document-qa-service \
+  --destination-run-region asia-northeast1 \
+  --location asia-northeast1 \
+  --event-filters "type=google.cloud.storage.object.v1.deleted" \
+  --event-filters "bucket=$GOOGLE_CLOUD_PROJECT.appspot.com" \
+  --service-account $SERVICE_ACCOUNT \
+  --destination-run-path /api/post
 ```
-- 変更後
-```
-  6 llm = VertexAI(model_name='gemini-1.5-flash-001', location='asia-northeast1',
-  7                temperature=0.1, max_output_tokens=256)
+- 変更後```
+SERVICE_ACCOUNT=eventarc-trigger@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud eventarc triggers create trigger-deleted-document-qa-service \
+  --destination-run-service document-qa-service \
+  --destination-run-region asia-northeast1 \
+  --location asia-northeast1 \
+  --event-filters "type=google.cloud.storage.object.v1.deleted" \
+  --event-filters "bucket=$GOOGLE_CLOUD_PROJECT.firebasestorage.app" \
+  --service-account $SERVICE_ACCOUNT \
+  --destination-run-path /api/post
 ```

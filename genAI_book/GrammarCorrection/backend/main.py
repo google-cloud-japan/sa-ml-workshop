@@ -2,17 +2,23 @@ import json
 import os
 import vertexai
 from flask import Flask, request
-from vertexai import generative_models
+from google import genai, auth
 
-vertexai.init(location='asia-northeast1')
-generation_model = generative_models.GenerativeModel('gemini-1.5-flash-001')
+_, PROJECT_ID = auth.default()
+vertexai.init(project=PROJECT_ID, location='us-central1')
+client = genai.Client(vertexai=True, project=PROJECT_ID, location='us-central1')
 app = Flask(__name__)
 
 
 def get_response(prompt, temperature=0.2):
-    response = generation_model.generate_content(
-        prompt, generation_config={'temperature': temperature, 'max_output_tokens': 1024})
-    return response.text.lstrip()
+    response = client.models.generate_content(
+        model='gemini-2.5-flash-lite',
+        contents=prompt,
+        config=genai.types.GenerateContentConfig(
+            temperature=temperature, max_output_tokens=1024
+        )
+    )
+    return response.candidates[0].content.parts[-1].text
 
 
 @app.route('/api/correction', methods=['POST'])

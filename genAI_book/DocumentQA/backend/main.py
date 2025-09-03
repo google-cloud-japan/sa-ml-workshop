@@ -13,14 +13,39 @@ from langchain_google_vertexai import VertexAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains import AnalyzeDocumentChain
+import vertexai
+from google import genai, auth
+
+
+vertexai.init(location='asia-northeast1')
+_, PROJECT_ID = auth.default()
+
+client = genai.Client(vertexai=True, project=PROJECT_ID, location='us-central1')
+
+def embed_documents(page_contents):
+    result = client.models.embed_content(
+        model='gemini-embedding-001',
+        config=genai.types.EmbedContentConfig(
+            output_dimensionality=768,
+            task_type='RETRIEVAL_DOCUMENT'
+        ),
+        contents= [page_contents])
+    return [item.values for item in result.embeddings]
+
+def embed_query(query):
+    result = client.models.embed_content(
+        model='gemini-embedding-001',
+        config=genai.types.EmbedContentConfig(
+            output_dimensionality=768,
+            task_type='QUESTION_ANSWERING'
+        ),
+        contents= [query])
+    return result.embeddings[0].values
 
 storage_client = storage.Client()
 llm = VertexAI(
-    model_name='gemini-1.5-flash-001', location='asia-northeast1',
+    model_name='gemini-2.5-flash-lite', location='us-central1',
     temperature=0.1, max_output_tokens=1024)
-embeddings = VertexAIEmbeddings(
-    model_name='textembedding-gecko-multilingual@001',
-    location='asia-northeast1')
 app = Flask(__name__)
 
 # This is to preload the tokenizer module
@@ -139,7 +164,7 @@ def process_event():
     page_contents = [
         page.page_content.encode('utf-8').replace(b'\x00', b'').decode('utf-8')
         for page in pages]
-    embedding_vectors = embeddings.embed_documents(page_contents, batch_size=5)
+    embedding_vectors = embed_documents(page_contents)
     for c, embedding_vector in enumerate(embedding_vectors):
         page = c+1
         insert_doc(docid, uid, filename, page,
@@ -156,7 +181,7 @@ def answer_question():
     json_data = request.get_json()
     uid = json_data['uid']
     question = json_data['question']
-    question_embedding = embeddings.embed_query(question)
+    question_embedding = embed_query(question)
 
     with pool.connect() as db_conn:
         search_stmt = sqlalchemy.text(
