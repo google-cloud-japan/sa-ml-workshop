@@ -28,7 +28,7 @@ Disclaimer: This is not an official Google product
 - その方がわかりやすい場合は、変更箇所の前後を含めて記載しています。
 
 ### 2.2.2 静的 Web ページ作成
-ファイル [`TestApp/src/package.json`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/TestApp/src/package.json)
+#### ファイル [`TestApp/src/package.json`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/TestApp/src/package.json)
 
 **p.24**
 - 変更前
@@ -106,7 +106,7 @@ print(response.safety_attributes)
 Gemini 2.5 では safety_attributes は取得できませんので、この部分は無視してください。
 
 ### 3.2.1 ノートブックでのプロトタイピング
-ノートブックファイル [`Notebooks/Grammar Correction with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Grammar%20Correction%20with%20PaLM%20API.ipynb)
+#### ノートブックファイル [`Notebooks/Grammar Correction with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Grammar%20Correction%20with%20PaLM%20API.ipynb)
 
 **p.77**
 - 変更前
@@ -153,7 +153,7 @@ Gemini 2.5 では safety_attributes は取得できませんので、この部�
 ```
 
 ### 3.2.2 バックエンドの実装
-ファイル [`GrammarCorrection/backend/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/requirements.txt)
+#### ファイル [`GrammarCorrection/backend/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/requirements.txt)
 
 **p.81**
 - 変更前
@@ -167,7 +167,7 @@ Gemini 2.5 では safety_attributes は取得できませんので、この部�
   3 google-cloud-aiplatform==1.111.0
 ```
 
-ファイル [`GrammarCorrection/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/main.py)
+#### ファイル [`GrammarCorrection/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/main.py)
 
 **p.84**
 - 変更前
@@ -203,7 +203,7 @@ Gemini 2.5 では safety_attributes は取得できませんので、この部�
  21     return response.candidates[0].content.parts[-1].text
 ```
 
-ファイル [`GrammarCorrection/backend/Dockerfile`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/Dockerfile)
+#### ファイル [`GrammarCorrection/backend/Dockerfile`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/GrammarCorrection/backend/Dockerfile)
 
 **p.86**
 - 変更前
@@ -214,14 +214,16 @@ Gemini 2.5 では safety_attributes は取得できませんので、この部�
 ```
   3 FROM python:3.11-slim
 ```
+### 3.3.1 Visual Captioning / Visual Q&Aの使い方
+Visual Captioning / Visual Q&A の機能は、Gemini のマルチモーダル対応機能で代替できるようになりました。そのため、これらの機能は Cloud Console の UI からは利用できなくなっているので、この項の内容は無視してください。
 
 ### 3.3.2 ノートブックでのプロトタイピング
-ノートブックファイル [`Notebooks/Fashion Compliment.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Fashion%20Compliment.ipynb)
+#### ノートブックファイル [`Notebooks/Fashion Compliment.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Fashion%20Compliment.ipynb)
 
-このノートブックでは、Visual Captioning と Visual QA の API を使用せずにすべての処理を gemini-2.5-flash-lite で処理するように書き換えています。詳細については、ノートブックの内容を参照してください。
+このノートブックでは、Visual Captioning と Visual Q&A の API を使用せずにすべてを gemini-2.5-flash-lite で処理するように書き換えています。詳細については、ノートブックの内容を参照してください。
 
 ### 3.3.3 Web アプリケーションの実装
-ファイル [`FashionCompliment/backend/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/requirements.txt)
+#### ファイル [`FashionCompliment/backend/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/requirements.txt)
 
 **p.109**
 - 変更前
@@ -236,7 +238,7 @@ Gemini 2.5 では safety_attributes は取得できませんので、この部�
   4 pillow==11.3.0
 ```
 
-ファイル [`FashionCompliment/backend/Dockerfile`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/Dockerfile)
+#### ファイル [`FashionCompliment/backend/Dockerfile`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/Dockerfile)
 
 **p.109**
 - 変更前
@@ -248,11 +250,11 @@ Gemini 2.5 では safety_attributes は取得できませんので、この部�
   3 FROM python:3.11-slim
 ```
 
-ファイル [`FashionCompliment/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/main.py)
+#### ファイル [`FashionCompliment/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/FashionCompliment/backend/main.py)
 
 バックエンドのコードでは、すべての処理を gemini-2.5-flash-lite で処理するように書き換えています。詳細はファイルの内容を確認してください。
 
-**本文内のコマンドの変更**
+#### 本文内のコマンドの変更
 
 **p.112**
 
@@ -271,7 +273,7 @@ main:app
 ```
 
 ### 4.1.1 LangChain 入門
-ノートブックファイル [`Notebooks/LangChain with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/LangChain%20with%20PaLM%20API.ipynb)
+#### ノートブックファイル [`Notebooks/LangChain with PaLM API.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/LangChain%20with%20PaLM%20API.ipynb)
 
 **p.125**
 - 変更前
@@ -318,7 +320,7 @@ main:app
 ```
 
 ### 4.1.2 PDF 文書の要約
-ノートブックファイル [`Notebooks/PDF Summarization.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/PDF%20Summarization.ipynb)
+#### ノートブックファイル [`Notebooks/PDF Summarization.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/PDF%20Summarization.ipynb)
 
 **p.132**
 - 変更前
@@ -392,7 +394,7 @@ main:app
 ```
 
 ### 4.2.1 Eventarc によるイベント連携
-ファイル [`EventarcTest/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/EventarcTest/requirements.txt)
+#### ファイル [`EventarcTest/requirements.txt`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/EventarcTest/requirements.txt)
 
 **p.141**
 - 変更前
@@ -404,7 +406,7 @@ main:app
   2 gunicorn==22.0.0
 ```
 
-**本文内のコマンドの変更**
+#### 本文内のコマンドの変更
 
 **p.143**
 
@@ -452,7 +454,7 @@ gsutil cp /tmp/testfile.txt \
 ```
 
 ### 4.2.2 Web アプリケーションの実装
-ファイル [`SmartDrive/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/SmartDrive/backend/main.py)
+#### ファイル [`SmartDrive/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/SmartDrive/backend/main.py)
 
 **p.147**
 - 変更前
@@ -486,7 +488,7 @@ gsutil cp /tmp/testfile.txt \
  87         {'input_document': document, 'question': prompt})['output_text'].replace('FINAL ANSWER: ', '')
 ```
 
-**本文内のコマンドの変更**
+#### 本文内のコマンドの変更
 
 **p.152**
 
@@ -544,17 +546,16 @@ gsutil cors set cors.json gs://$GOOGLE_CLOUD_PROJECT.firebasestorage.app
 ```
 
 ### 5.1.2 ノートブックでのプロトタイピング
-ノートブックファイル [`Notebooks/Document QA.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Document%20QA.ipynb)
+#### ノートブックファイル [`Notebooks/Document QA.ipynb`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/Notebooks/Document%20QA.ipynb)
 
 このノートブックでは、Embedding API を使用せずに、エンベディングモデル gemini-embedding-001 を GenAI API から利用するように書き換えています。詳細については、ノートブックの内容を参照してください。
 
 ### 5.2.1 バックエンドの実装確認とデプロイ
-
-ファイル [`DocumentQA/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/DocumentQA/backend/main.py)
+#### ファイル [`DocumentQA/backend/main.py`](https://github.com/google-cloud-japan/sa-ml-workshop/blob/main/genAI_book/DocumentQA/backend/main.py)
 
 埋め込みベクトルの作成をノートブックで確認した方法（エンベディングモデル gemini-embedding-001 を GenAI API から利用する方法）に変更しています。本文での説明には大きな影響はありませんが、実際のコードと行番号がずれている点に注意してください。
 
-**本文内のコマンドの変更**
+#### 本文内のコマンドの変更
 
 **p.182**
 
