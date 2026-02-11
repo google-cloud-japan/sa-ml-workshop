@@ -7,7 +7,7 @@ langchain==0.3.27
 langchain-community==0.3.29
 langchain-google-vertexai==2.0.28
 pypdf==6.0.0
-cryptography==42.0.4
+cryptography==46.0.5
 transformers==4.36.0
 SQLAlchemy==2.0.21
 pg8000==1.30.4
