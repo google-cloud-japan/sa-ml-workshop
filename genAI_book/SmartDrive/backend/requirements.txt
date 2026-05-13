@@ -3,7 +3,7 @@ gunicorn==22.0.0
 cloudevents==1.9.0
 google-cloud-storage==2.19.0
 google-cloud-aiplatform==1.111.0
-langchain==0.3.27
+langchain==0.3.30
 langchain-community==0.3.29
 langchain-google-vertexai==2.0.28
 pypdf==6.0.0
