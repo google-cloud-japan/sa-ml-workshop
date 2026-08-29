@@ -10,5 +10,5 @@ pypdf==6.0.0
 cryptography==42.0.4
 transformers==4.36.0
 SQLAlchemy==2.0.21
-pg8000==1.30.4
+pg8000==1.31.5
 cloud-sql-python-connector[pg8000]==1.7.0
