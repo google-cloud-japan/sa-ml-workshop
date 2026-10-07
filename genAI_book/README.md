@@ -439,11 +439,11 @@ gcloud eventarc triggers create trigger-eventarc-test-service \
 
 **p.144**
 
-本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
+本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。また、gsutil コマンドの代わりに gcloud storage コマンドを使用します。
 - 変更前
 ```
 date > /tmp/testfile.txt
-gcloud storage cp /tmp/testfile.txt \
+gsutil cp /tmp/testfile.txt \
   gs://$GOOGLE_CLOUD_PROJECT.appspot.com/test/testfile.txt
 ```
 - 変更後
