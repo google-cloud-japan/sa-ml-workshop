@@ -443,13 +443,13 @@ gcloud eventarc triggers create trigger-eventarc-test-service \
 - 変更前
 ```
 date > /tmp/testfile.txt
-gsutil cp /tmp/testfile.txt \
+gcloud storage cp /tmp/testfile.txt \
   gs://$GOOGLE_CLOUD_PROJECT.appspot.com/test/testfile.txt
 ```
 - 変更後
 ```
 date > /tmp/testfile.txt
-gsutil cp /tmp/testfile.txt \
+gcloud storage cp /tmp/testfile.txt \
   gs://$GOOGLE_CLOUD_PROJECT.firebasestorage.app/test/testfile.txt
 ```
 
@@ -524,12 +524,12 @@ gcloud eventarc triggers create trigger-pdf-summary-service \
 本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
 - 変更前
 ```
-gsutil cp $HOME/genAI_book/PDF/handbook-prologue.pdf \
+gcloud storage cp $HOME/genAI_book/PDF/handbook-prologue.pdf \
   gs://$GOOGLE_CLOUD_PROJECT.appspot.com/test/handbook-prologue.pdf
 ```
 - 変更後
 ```
-gsutil cp $HOME/genAI_book/PDF/handbook-prologue.pdf \
+gcloud storage cp $HOME/genAI_book/PDF/handbook-prologue.pdf \
   gs://$GOOGLE_CLOUD_PROJECT.firebasestorage.app/test/handbook-prologue.pdf
 ```
 
@@ -538,11 +538,11 @@ gsutil cp $HOME/genAI_book/PDF/handbook-prologue.pdf \
 本文中の下記のコマンドで指定するバケット名の末尾を `.appspot.com` から `.firebasestorage.app` に変更します。
 - 変更前
 ```
-gsutil cors set cors.json gs://$GOOGLE_CLOUD_PROJECT.appspot.com
+gcloud storage buckets update gs://$GOOGLE_CLOUD_PROJECT.appspot.com --cors-file=cors.json
 ```
 - 変更後
 ```
-gsutil cors set cors.json gs://$GOOGLE_CLOUD_PROJECT.firebasestorage.app
+gcloud storage buckets update gs://$GOOGLE_CLOUD_PROJECT.firebasestorage.app --cors-file=cors.json
 ```
 
 ### 5.1.2 ノートブックでのプロトタイピング
